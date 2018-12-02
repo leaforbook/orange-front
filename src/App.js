@@ -1,28 +1,41 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+import ReactDOM from 'react-dom';
 import './App.css';
+import Login from './components/login';
+import Register from "./components/register";
+import FastClick from 'fastclick';
+import {
+    Switch,
+    HashRouter,
+    Route
+} from 'react-router-dom';
 
-class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
+window.addEventListener('load', () => {
+    FastClick.attach(document.body);
+});
+
+const routes = [
+    { path: '/', component: Login },
+    { path: '/login', component: Login },
+    { path: '/register', component: Register }
+];
+
+const App = (props, context) =>
+    (
+        <HashRouter>
+            <Switch>
+                {
+                    routes.map( route=> (
+                        <Route key={route.path} path={route.path} exact={route.exact} component={route.component}/>
+                    ))
+                }
+            </Switch>
+        </HashRouter>
     );
-  }
-}
 
 export default App;
+
+ReactDOM.render((<App/>), document.getElementById('root'));
+
+
+
