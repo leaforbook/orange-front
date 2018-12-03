@@ -1,41 +1,19 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import './App.css';
-import Login from './components/login';
-import Register from "./components/register";
-import FastClick from 'fastclick';
-import {
-    Switch,
-    HashRouter,
-    Route
-} from 'react-router-dom';
+import Header from './components/main/header';
+import Body from './components/main/body';
+import Footer from './components/main/footer';
 
-window.addEventListener('load', () => {
-    FastClick.attach(document.body);
-});
-
-const routes = [
-    { path: '/', component: Login },
-    { path: '/login', component: Login },
-    { path: '/register', component: Register }
-];
-
-const App = (props, context) =>
+const App = () =>
     (
-        <HashRouter>
-            <Switch>
-                {
-                    routes.map( route=> (
-                        <Route key={route.path} path={route.path} exact={route.exact} component={route.component}/>
-                    ))
-                }
-            </Switch>
-        </HashRouter>
+        <div>
+            <Header/>
+            <Body/>
+            <Footer/>
+        </div>
     );
 
 export default App;
-
-ReactDOM.render((<App/>), document.getElementById('root'));
-
 
 

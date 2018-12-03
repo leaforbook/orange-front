@@ -29,6 +29,7 @@ import 'weui';
 import 'react-weui/build/packages/react-weui.css';
 import Page from "../page";
 import Login from "../login";
+import {Link} from "react-router-dom";
 
 export default class Register extends React.Component {
 
@@ -96,7 +97,7 @@ export default class Register extends React.Component {
                                 </Button>
                             </ButtonArea>
                             <ButtonArea direction="horizontal">
-                                <Button type="default" to="/login">返回登录</Button>
+                                <Link to='/login'><Button type="default" to="/login">返回登录</Button></Link>
                             </ButtonArea>
                         </div>
                     </FlexItem>
