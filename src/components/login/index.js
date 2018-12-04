@@ -36,11 +36,24 @@ export default class Login extends React.Component {
     constructor(props) {
         super(props);
 
-        this.state = {}
+        this.state = {
+            form : {
+                username: '',
+                password: ''
+            }
+        }
+    }
+
+    handlerChange = (event, property) => {
+        this.form[property] = event.target.value
+        this.setState({
+            form: form
+        })
     }
 
     render() {
         return (
+            <div>
             <Page className="input" title="" subTitle="">
                 <Flex>
                     <FlexItem>
@@ -55,7 +68,7 @@ export default class Login extends React.Component {
                             <Form>
                                 <FormCell>
                                     <CellBody>
-                                        <Input type="tel" placeholder="请输入用户名"/>
+                                        <Input type="tel" defaultValue={this.state.form.username} placeholder="请输入用户名" onBlur={this.handlerChange('username').bind(this)}/>
                                     </CellBody>
                                 </FormCell>
                                 <FormCell>
@@ -76,8 +89,10 @@ export default class Login extends React.Component {
                                     登录
                                 </Button>
                             </ButtonArea>
-                            <ButtonArea direction="horizontal">
-                                <Button type="default">忘记密码</Button>
+                            <ButtonArea>
+                                <Link to='/reset'><Button type="default">忘记密码</Button></Link>
+                            </ButtonArea>
+                            <ButtonArea>
                                 <Link to='/register'><Button type="default">注册新用户</Button></Link>
                             </ButtonArea>
                         </div>
@@ -86,6 +101,7 @@ export default class Login extends React.Component {
 
 
             </Page>
+            </div>
         )
 
     }

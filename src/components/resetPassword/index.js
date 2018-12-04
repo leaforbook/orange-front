@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import ReactDOM from 'react-dom';
 import {
     ButtonArea,
     Button,
@@ -28,10 +27,9 @@ import {
 import 'weui';
 import 'react-weui/build/packages/react-weui.css';
 import Page from "../page";
-import Login from "../login";
 import {Link} from "react-router-dom";
 
-export default class Register extends React.Component {
+export default class ResetPassword extends React.Component {
 
     constructor(props) {
         super(props);
@@ -46,7 +44,7 @@ export default class Register extends React.Component {
                 <Flex>
                     <FlexItem>
                         <div className="placeholder">
-                            <CellsTitle>注册</CellsTitle>
+                            <CellsTitle>重置密码</CellsTitle>
                         </div>
                     </FlexItem>
                 </Flex>
@@ -56,32 +54,22 @@ export default class Register extends React.Component {
                             <Form>
                                 <FormCell>
                                     <CellBody>
-                                        <Input type="tel" placeholder="请输入真实姓名"/>
-                                    </CellBody>
-                                </FormCell>
-                                <FormCell>
-                                    <CellBody>
-                                        <Input type="tel" placeholder="请输入手机号"/>
-                                    </CellBody>
-                                </FormCell>
-                                <FormCell>
-                                    <CellBody>
                                         <Input type="tel" placeholder="请输入用户名"/>
                                     </CellBody>
                                 </FormCell>
                                 <FormCell>
                                     <CellBody>
-                                        <Input type="password" placeholder="请输入密码"/>
+                                        <Input type="password" placeholder="请输入新密码"/>
                                     </CellBody>
                                 </FormCell>
                                 <FormCell>
                                     <CellBody>
-                                        <Input type="password" placeholder="请再次输入密码"/>
+                                        <Input type="password" placeholder="请再次输入新密码"/>
                                     </CellBody>
                                 </FormCell>
                                 <FormCell>
                                     <CellBody>
-                                        <Input type="tel" placeholder="请输入注册码"/>
+                                        <Input type="tel" placeholder="请输入重置码"/>
                                     </CellBody>
                                 </FormCell>
                             </Form>
@@ -94,7 +82,7 @@ export default class Register extends React.Component {
                                         window.setTimeout(e => this.setState({showToptips: !this.state.showToptips}), 2000)
                                     }
                                     }>
-                                    注册
+                                    确认重置
                                 </Button>
                             </ButtonArea>
                             <ButtonArea>

@@ -1,0 +1,4 @@
+export const LOGIN_FORM = "LOGIN_FORM"
+export const REGISTER_FORM = "REGISTER_FORM"
+export const RESET_PASSWORD_FROM = "RESET_PASSWORD_FROM"
+
