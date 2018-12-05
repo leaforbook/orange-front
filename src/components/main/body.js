@@ -3,6 +3,7 @@ import { Switch, Route } from 'react-router-dom'
 import Login from '../login'
 import Register from '../register'
 import ResetPassword from "../resetPassword";
+import Home from "../home";
 
 
 export default class Body extends React.Component {
@@ -15,6 +16,7 @@ export default class Body extends React.Component {
                     <Route path='/login' component={Login}/>
                     <Route path='/register' component={Register}/>
                     <Route path='/reset' component={ResetPassword}/>
+                    <Route path='/home' component={Home}/>
                 </Switch>
             </main>
         )

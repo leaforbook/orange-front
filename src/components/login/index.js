@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import ReactDOM from 'react-dom';
 import {
     ButtonArea,
     Button,
@@ -29,15 +28,18 @@ import {
 import 'weui';
 import 'react-weui/build/packages/react-weui.css';
 import Page from "../page";
-import { Link } from 'react-router-dom';
+import Post from '../../public/http_util'
 
 export default class Login extends React.Component {
 
     constructor(props) {
+
         super(props);
 
         this.state = {
             showLoading: false,
+            showWarn: false,
+            warnMsg: '',
             form : {
                 userName: '',
                 password: ''
@@ -51,32 +53,35 @@ export default class Login extends React.Component {
     }
 
     login = (event) => {
+
+        this.setState({showLoading: true});
+
         var url = '/common/user/login';
         var data = this.state.form;
 
+        Post(url,data).then(res => {
+            console.log(res);
+            this.setState({showLoading: false});
+            this.props.history.push('/home');
+        }).catch(err => {
+            console.log(err)
+            this.setState({showLoading: false});
+            this.showWarn(err);
+        });
 
-
-        fetch(url, {
-            method: 'POST', // or 'PUT'
-            body: JSON.stringify(data), // data can be `string` or {object}!
-            headers: new Headers({
-                'Content-Type': 'application/json'
-            })
-        }).then(res => res.json())
-            .catch(error => console.error('Error:', error))
-            .then(response => {
-                    console.log('Success:', response);
-                    this.props.history.push('/register');
-            }
-            );
     }
 
-    showLoading() {
-        this.setState({showLoading: true});
+    showWarn(msg) {
+        this.setState({showWarn: true});
+        this.setState({warnMsg: msg});
 
-        this.state.loadingTimer = setTimeout(()=> {
-            this.setState({showLoading: false});
-        }, 1000);
+        this.state.warnTimer = setTimeout(()=> {
+            this.setState({showWarn: false});
+        }, 2000);
+    }
+
+    turnTO = (path,event) => {
+        this.props.history.push(path);
     }
 
     render() {
@@ -108,18 +113,17 @@ export default class Login extends React.Component {
                             <ButtonArea>
                                 <Button
                                     //button to display toptips
-                                    onClick={(event) => { this.login(); this.showLoading();}}>
+                                    onClick={(event) => { this.login(); }}>
                                     登录
                                 </Button>
                             </ButtonArea>
-                            <ButtonArea>
-                                <Link to='/reset'><Button type="default">忘记密码</Button></Link>
-                            </ButtonArea>
-                            <ButtonArea>
-                                <Link to='/register'><Button type="default">注册新用户</Button></Link>
+                            <ButtonArea  direction="horizontal">
+                                <Button type="default" onClick={(event) => { this.turnTO('/reset'); }}>忘记密码</Button>
+                                <Button type="default" onClick={(event) => { this.turnTO('/register'); }}>注册新用户</Button>
                             </ButtonArea>
 
                             <Toast icon="loading" show={this.state.showLoading}>登录中...</Toast>
+                            <Toptips type="warn" show={this.state.showWarn}> {this.state.warnMsg} </Toptips>
                         </div>
                     </FlexItem>
                 </Flex>
