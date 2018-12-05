@@ -7,14 +7,41 @@ import {
 } from 'react-weui';
 import 'weui';
 import 'react-weui/build/packages/react-weui.css';
-import IconButton from 'weui/dist/example/images/icon_nav_button.png';
-import IconMsg from 'weui/dist/example/images/icon_nav_msg.png';
+import DaoHangDark from '../../images/daohang-d.png';
+import DaoHangLight from '../../images/daohang-l2.png';
+import GeRenDark from '../../images/geren-d.png';
+import GeRenLight from '../../images/geren-l2.png';
+import '../../item.css';
+
 
 export default class Home extends React.Component {
+
+    constructor(props) {
+
+        super(props);
+
+        this.state = {
+            daohang: <img src={DaoHangLight}/>,
+            geren:<img src={GeRenDark}/>,
+        }
+    }
+
+    clickDaoHang = (event) => {
+        this.setState({daohang: <img src={DaoHangLight}/>});
+        this.setState({geren: <img src={GeRenDark}/>});
+    }
+
+    clickGeRen = (event) => {
+        console.log('ddd');
+        this.setState({daohang: <img src={DaoHangDark}/>});
+        this.setState({geren: <img src={GeRenLight}/>});
+    }
+
     render() {
         return (
-                <Tab type="tabbar">
-                    <TabBarItem icon={<img src={IconButton}/>} label="发现">
+            <div className="main_wrapper">
+                <Tab type="tabbar" >
+                    <TabBarItem icon={this.state.daohang} label="发现" onClick={(event) => { this.clickDaoHang(); }}>
                         <Article>
                             <h1>Page 1</h1>
                             <section>
@@ -29,7 +56,7 @@ export default class Home extends React.Component {
                             </section>
                         </Article>
                     </TabBarItem>
-                    <TabBarItem icon={<img src={IconMsg}/>} label="我">
+                    <TabBarItem icon={this.state.geren} label="我" onClick={(event) => { this.clickGeRen(); }}>
                         <Article>
                             <h1>Page 2</h1>
                             <section>
@@ -45,6 +72,8 @@ export default class Home extends React.Component {
                         </Article>
                     </TabBarItem>
                 </Tab>
+            </div>
+
         );
     }
 }
