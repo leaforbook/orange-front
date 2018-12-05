@@ -23,12 +23,12 @@ import {
     Agreement,
     Toptips,
     Flex,
-    FlexItem
+    FlexItem,
+    Toast
 } from 'react-weui';
 import 'weui';
 import 'react-weui/build/packages/react-weui.css';
 import Page from "../page";
-import Login from "../login";
 import {Link} from "react-router-dom";
 
 export default class Register extends React.Component {
@@ -37,6 +37,18 @@ export default class Register extends React.Component {
         super(props);
 
         this.state = {}
+    }
+
+    register() {
+
+    }
+
+    showLoading() {
+        this.setState({showLoading: true});
+
+        this.state.loadingTimer = setTimeout(()=> {
+            this.setState({showLoading: false});
+        }, 1000);
     }
 
     render() {
@@ -88,18 +100,15 @@ export default class Register extends React.Component {
                             <ButtonArea>
                                 <Button
                                     //button to display toptips
-                                    onClick={e => {
-                                        if (this.state.showToptips) return;
-                                        this.setState({showToptips: !this.state.showToptips})
-                                        window.setTimeout(e => this.setState({showToptips: !this.state.showToptips}), 2000)
-                                    }
-                                    }>
+                                    onClick={(event) => { this.register(); this.showLoading();}}>
                                     注册
                                 </Button>
                             </ButtonArea>
                             <ButtonArea>
                                 <Link to='/login'><Button type="default" size="normal">返回登录</Button></Link>
                             </ButtonArea>
+
+                            <Toast icon="loading" show={this.state.showLoading}>注册中...</Toast>
                         </div>
                     </FlexItem>
                 </Flex>

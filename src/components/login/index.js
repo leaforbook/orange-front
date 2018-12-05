@@ -23,13 +23,13 @@ import {
     Agreement,
     Toptips,
     Flex,
-    FlexItem
+    FlexItem,
+    Toast
 } from 'react-weui';
 import 'weui';
 import 'react-weui/build/packages/react-weui.css';
 import Page from "../page";
-import { Link } from 'react-router-dom'
-
+import { Link } from 'react-router-dom';
 
 export default class Login extends React.Component {
 
@@ -37,6 +37,7 @@ export default class Login extends React.Component {
         super(props);
 
         this.state = {
+            showLoading: false,
             form : {
                 userName: '',
                 password: ''
@@ -45,13 +46,37 @@ export default class Login extends React.Component {
     }
 
     handlerChange = (p,event) => {
-        console.log(event.target.value)
         this.state.form[p] = event.target.value
         console.log(this.state.form)
     }
 
     login = (event) => {
-        
+        var url = '/common/user/login';
+        var data = this.state.form;
+
+
+
+        fetch(url, {
+            method: 'POST', // or 'PUT'
+            body: JSON.stringify(data), // data can be `string` or {object}!
+            headers: new Headers({
+                'Content-Type': 'application/json'
+            })
+        }).then(res => res.json())
+            .catch(error => console.error('Error:', error))
+            .then(response => {
+                    console.log('Success:', response);
+                    this.props.history.push('/register');
+            }
+            );
+    }
+
+    showLoading() {
+        this.setState({showLoading: true});
+
+        this.state.loadingTimer = setTimeout(()=> {
+            this.setState({showLoading: false});
+        }, 1000);
     }
 
     render() {
@@ -83,7 +108,7 @@ export default class Login extends React.Component {
                             <ButtonArea>
                                 <Button
                                     //button to display toptips
-                                    onClick={this.login}>
+                                    onClick={(event) => { this.login(); this.showLoading();}}>
                                     登录
                                 </Button>
                             </ButtonArea>
@@ -93,6 +118,8 @@ export default class Login extends React.Component {
                             <ButtonArea>
                                 <Link to='/register'><Button type="default">注册新用户</Button></Link>
                             </ButtonArea>
+
+                            <Toast icon="loading" show={this.state.showLoading}>登录中...</Toast>
                         </div>
                     </FlexItem>
                 </Flex>
