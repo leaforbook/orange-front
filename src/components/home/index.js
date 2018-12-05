@@ -8,9 +8,7 @@ import {
 import 'weui';
 import 'react-weui/build/packages/react-weui.css';
 import DaoHangDark from '../../images/daohang-d.png';
-import DaoHangLight from '../../images/daohang-l2.png';
 import GeRenDark from '../../images/geren-d.png';
-import GeRenLight from '../../images/geren-l2.png';
 import '../../item.css';
 
 
@@ -21,27 +19,16 @@ export default class Home extends React.Component {
         super(props);
 
         this.state = {
-            daohang: <img src={DaoHangLight}/>,
+            daohang: <img src={DaoHangDark}/>,
             geren:<img src={GeRenDark}/>,
         }
     }
 
-    clickDaoHang = (event) => {
-        this.setState({daohang: <img src={DaoHangLight}/>});
-        this.setState({geren: <img src={GeRenDark}/>});
-    }
-
-    clickGeRen = (event) => {
-        console.log('ddd');
-        this.setState({daohang: <img src={DaoHangDark}/>});
-        this.setState({geren: <img src={GeRenLight}/>});
-    }
-
     render() {
         return (
-            <div className="main_wrapper">
+            <div className="main_wrapper" >
                 <Tab type="tabbar" >
-                    <TabBarItem icon={this.state.daohang} label="发现" onClick={(event) => { this.clickDaoHang(); }}>
+                    <TabBarItem icon={this.state.daohang} label="发现">
                         <Article>
                             <h1>Page 1</h1>
                             <section>
@@ -56,7 +43,7 @@ export default class Home extends React.Component {
                             </section>
                         </Article>
                     </TabBarItem>
-                    <TabBarItem icon={this.state.geren} label="我" onClick={(event) => { this.clickGeRen(); }}>
+                    <TabBarItem icon={this.state.geren} label="我">
                         <Article>
                             <h1>Page 2</h1>
                             <section>
