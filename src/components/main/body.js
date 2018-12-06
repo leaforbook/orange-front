@@ -7,6 +7,8 @@ import Home from "../home";
 import GetKey from "../key";
 import ZanShangComponent from "../key/zanshang";
 import User from "../user";
+import ModifyPassword from "../modifyPassword";
+import AuthorizedRoute from '../route';
 
 
 export default class Body extends React.Component {
@@ -15,15 +17,17 @@ export default class Body extends React.Component {
         return (
             <main>
                 <Switch>
-                    <Route exact path='/' component={Home}/>
-                    <Route path='/home' component={Home}/>
-                    <Route path='/zanshang' component={ZanShangComponent}/>
-
                     <Route path='/login' component={Login}/>
                     <Route path='/register' component={Register}/>
                     <Route path='/reset' component={ResetPassword}/>
                     <Route path='/getKey' component={GetKey}/>
-                    <Route path='/user' component={User}/>
+
+
+                    <AuthorizedRoute exact path='/' component={Home}/>
+                    <AuthorizedRoute path='/home' component={Home}/>
+                    <AuthorizedRoute path='/zanshang' component={ZanShangComponent}/>
+                    <AuthorizedRoute path='/modify' component={ModifyPassword}/>
+                    <AuthorizedRoute path='/user' component={User}/>
                 </Switch>
             </main>
         )

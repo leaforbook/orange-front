@@ -45,13 +45,18 @@ export default class ResetPassword extends React.Component {
 
         this.setState({showLoading: true});
 
-        var url = '/common/user/login';
+        var url = '/common/user/resetPassword';
         var data = this.state.form;
 
         Post(url,data).then(res => {
             console.log(res);
             this.setState({showLoading: false});
-            this.props.history.push('/home');
+            if(res.code === '0') {
+                this.props.history.push('/home');
+            }else {
+                this.showWarn(res.msg);
+            }
+
         }).catch(err => {
             console.log(err)
             this.setState({showLoading: false});
