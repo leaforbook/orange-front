@@ -10,6 +10,7 @@ import {
 import 'weui';
 import 'react-weui/build/packages/react-weui.css';
 import Post from '../../public/http_util';
+import {Button} from "../key/zanshang";
 
 export default class User extends React.Component {
     constructor(props) {
@@ -35,6 +36,11 @@ export default class User extends React.Component {
         })
 
     }
+    
+    goBack () {
+        this.props.history.goBack();
+    }
+
 
     render() {
         return (
@@ -48,6 +54,7 @@ export default class User extends React.Component {
                         <PreviewItem label="手机号" value={this.state.form.telephone} />
                     </PreviewBody>
                     <PreviewFooter>
+                        <PreviewButton  onClick={(event) => { this.goBack(); }}>返回</PreviewButton>
                         <PreviewButton >修改密码</PreviewButton>
                         <PreviewButton primary>修改信息</PreviewButton>
                     </PreviewFooter>
