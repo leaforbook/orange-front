@@ -10,12 +10,17 @@ import {
     Button,
     Toast,
     Toptips,
-    CellsTitle
+    CellsTitle,
+    Footer,
+    FooterLinks,
+    FooterLink,
+    FooterText
 } from 'react-weui';
 import 'weui';
 import 'react-weui/build/packages/react-weui.css';
 import Page from "../page";
 import Post from '../../public/http_util';
+import "../../item.css"
 
 export default class Login extends React.Component {
 
@@ -117,6 +122,22 @@ export default class Login extends React.Component {
 
 
             </Page>
+
+                <div className="fill_space"></div>
+                <div className="fill_space"></div>
+                <div className="fill_space"></div>
+                <div className="fill_space"></div>
+                <div className="fill_space"></div>
+                <div className="fill_space"></div>
+                <div className="fill_space"></div>
+                <div className="fill_space"></div>
+
+                <Footer>
+                    <FooterLinks>
+                        <FooterLink href="/home">Home</FooterLink>
+                    </FooterLinks>
+                    <FooterText>Copyright &copy; 2018-2028 leaforbook.com</FooterText>
+                </Footer>
             </div>
         )
 

@@ -26,7 +26,7 @@ export default class Body extends React.Component {
                     <AuthorizedRoute exact path='/' component={Home}/>
                     <AuthorizedRoute path='/home' component={Home}/>
                     <AuthorizedRoute path='/zanshang' component={ZanShangComponent}/>
-                    <AuthorizedRoute path='/modify' component={ModifyPassword}/>
+                    <AuthorizedRoute path='/modify/:userName' component={ModifyPassword}/>
                     <AuthorizedRoute path='/user' component={User}/>
                 </Switch>
             </main>

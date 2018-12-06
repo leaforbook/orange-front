@@ -10,7 +10,11 @@ import {
     Button,
     Toast,
     Toptips,
-    CellsTitle
+    CellsTitle,
+    Footer,
+    FooterLinks,
+    FooterLink,
+    FooterText
 } from 'react-weui';
 import 'weui';
 import 'react-weui/build/packages/react-weui.css';
@@ -137,6 +141,17 @@ export default class Register extends React.Component {
                 </Flex>
 
             </Page>
+
+                <div className="fill_space"></div>
+                <div className="fill_space"></div>
+                <div className="fill_space"></div>
+
+                <Footer>
+                    <FooterLinks>
+                        <FooterLink href="/home">Home</FooterLink>
+                    </FooterLinks>
+                    <FooterText>Copyright &copy; 2018-2028 leaforbook.com</FooterText>
+                </Footer>
             </div>
 
         )

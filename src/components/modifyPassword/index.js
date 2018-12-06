@@ -28,7 +28,7 @@ export default class ModifyPassword extends React.Component {
             showWarn: false,
             warnMsg: '',
             form : {
-                userName: props.userName,
+                userName: props.match.params.userName,
                 password: '',
                 newPassword:'',
                 repeatNewPassword:''
@@ -99,7 +99,7 @@ export default class ModifyPassword extends React.Component {
                                 <Form>
                                     <FormCell>
                                         <CellBody>
-                                            <Input type="tel" placeholder="请输入用户名" defaultValue={this.state.form.userName}  onBlur={this.handlerChange.bind(this,"userName")}/>
+                                            <Input type="tel" placeholder="请输入用户名" defaultValue={this.state.form.userName} readOnly/>
                                         </CellBody>
                                     </FormCell>
                                     <FormCell>

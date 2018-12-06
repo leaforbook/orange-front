@@ -93,10 +93,8 @@ export default class User extends React.Component {
 
     turnTO = (path,event) => {
         //this.props.history.push(path);
-        this.props.history.push({
-            pathname: path,
-            query:{userName:this.state.form.userName}
-        })
+
+        this.props.history.push(path+"/"+this.state.form.userName);
     }
 
 
