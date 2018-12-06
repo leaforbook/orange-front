@@ -3,13 +3,23 @@ import React, {Component} from 'react';
 import {
     Tab,
     TabBarItem,
-    Article
+    CellsTitle,
+    Cells,
+    Cell,
+    CellBody,
+    CellFooter,
+    CellHeader
 } from 'react-weui';
 import 'weui';
 import 'react-weui/build/packages/react-weui.css';
 import DaoHangDark from '../../images/daohang-d.png';
 import GeRenDark from '../../images/geren-d.png';
 import '../../item.css';
+import ChanPin from '../../images/chanpin.png';
+import DingDan from '../../images/dingdan.png';
+import FaHuo from '../../images/fahuo.png';
+import GeRenFill from '../../images/geren_fill.png';
+import AiXin from '../../images/aixin.png';
 
 
 export default class Home extends React.Component {
@@ -24,40 +34,100 @@ export default class Home extends React.Component {
         }
     }
 
+    turnTO = (path,event) => {
+        console.log("ddd")
+        this.props.history.push(path);
+    }
+
     render() {
         return (
-            <div className="main_wrapper" >
+            <div>
                 <Tab type="tabbar" >
                     <TabBarItem icon={this.state.daohang} label="发现">
-                        <Article>
-                            <h1>Page 1</h1>
-                            <section>
-                                <h2 className="title">Heading</h2>
-                                <section>
-                                    <h3>1.1 Title</h3>
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                                        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                                        quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                                        consequat. Duis aute</p>
-                                </section>
-                            </section>
-                        </Article>
+
+                        <div className="fill_space"> </div>
+
+                        <CellsTitle></CellsTitle>
+                        <Cells>
+                            <Cell access>
+                                <CellHeader>
+                                    <img src={ChanPin} alt="" style={{display: `block`, width: `20px`, marginRight: `5px`}}/>
+                                </CellHeader>
+                                <CellBody>
+                                    产品
+                                </CellBody>
+                                <CellFooter>
+
+                                </CellFooter>
+                            </Cell>
+                        </Cells>
+
+                        <CellsTitle></CellsTitle>
+                        <Cells>
+                            <Cell access>
+                                <CellHeader>
+                                    <img src={DingDan} alt="" style={{display: `block`, width: `20px`, marginRight: `5px`}}/>
+                                </CellHeader>
+                                <CellBody>
+                                    订单
+                                </CellBody>
+                                <CellFooter>
+
+                                </CellFooter>
+                            </Cell>
+                        </Cells>
+
+                        <CellsTitle></CellsTitle>
+                        <Cells>
+                            <Cell access>
+                                <CellHeader>
+                                    <img src={FaHuo} alt="" style={{display: `block`, width: `20px`, marginRight: `5px`}}/>
+                                </CellHeader>
+                                <CellBody>
+                                    发货
+                                </CellBody>
+                                <CellFooter>
+
+                                </CellFooter>
+                            </Cell>
+                        </Cells>
+
+
                     </TabBarItem>
                     <TabBarItem icon={this.state.geren} label="我">
-                        <Article>
-                            <h1>Page 2</h1>
-                            <section>
-                                <h2 className="title">Heading</h2>
-                                <section>
-                                    <h3>2.1 Title</h3>
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                                        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                                        quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                                        consequat. Duis aute</p>
-                                </section>
-                            </section>
-                        </Article>
+                        <div className="fill_space"> </div>
+
+                        <CellsTitle></CellsTitle>
+                        <Cells>
+                            <Cell access  onClick={(event) => { this.turnTO('/user'); }}>
+                                <CellHeader>
+                                    <img src={GeRenFill} alt="" style={{display: `block`, width: `20px`, marginRight: `5px`}}/>
+                                </CellHeader>
+                                <CellBody>
+                                    个人
+                                </CellBody>
+                                <CellFooter>
+
+                                </CellFooter>
+                            </Cell>
+                        </Cells>
+
+                        <CellsTitle></CellsTitle>
+                        <Cells>
+                            <Cell access  onClick={(event) => { this.turnTO('/zanshang'); }}>
+                                <CellHeader>
+                                    <img src={AiXin} alt="" style={{display: `block`, width: `20px`, marginRight: `5px`}}/>
+                                </CellHeader>
+                                <CellBody>
+                                    捐助
+                                </CellBody>
+                                <CellFooter>
+
+                                </CellFooter>
+                            </Cell>
+                        </Cells>
                     </TabBarItem>
+
                 </Tab>
             </div>
 

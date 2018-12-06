@@ -1,40 +1,76 @@
-import React, {Component} from 'react';
+import React from 'react';
 import {
-    ButtonArea,
-    Button,
-    CellsTitle,
-    CellsTips,
-    Cell,
-    CellHeader,
-    CellBody,
-    CellFooter,
+    Flex,
+    FlexItem,
     Form,
     FormCell,
-    Icon,
+    CellBody,
     Input,
-    Label,
-    TextArea,
-    Switch,
-    Radio,
-    Checkbox,
-    Select,
-    VCode,
-    Agreement,
+    ButtonArea,
+    Button,
+    Toast,
     Toptips,
-    Flex,
-    FlexItem
+    CellsTitle
 } from 'react-weui';
 import 'weui';
 import 'react-weui/build/packages/react-weui.css';
 import Page from "../page";
-import {Link} from "react-router-dom";
+import Post from "../../public/http_util";
 
 export default class ResetPassword extends React.Component {
 
     constructor(props) {
+
         super(props);
 
-        this.state = {}
+        this.state = {
+            showLoading: false,
+            showWarn: false,
+            warnMsg: '',
+            form : {
+                userName: '',
+                password: '',
+                repeatPassword:'',
+                proof:''
+            }
+        }
+    }
+
+    handlerChange = (p,event) => {
+        this.state.form[p] = event.target.value
+        console.log(this.state.form)
+    }
+
+    reset = (event) => {
+
+        this.setState({showLoading: true});
+
+        var url = '/common/user/login';
+        var data = this.state.form;
+
+        Post(url,data).then(res => {
+            console.log(res);
+            this.setState({showLoading: false});
+            this.props.history.push('/home');
+        }).catch(err => {
+            console.log(err)
+            this.setState({showLoading: false});
+            this.showWarn(err);
+        });
+
+    }
+
+    showWarn(msg) {
+        this.setState({showWarn: true});
+        this.setState({warnMsg: msg});
+
+        this.state.warnTimer = setTimeout(()=> {
+            this.setState({showWarn: false});
+        }, 2000);
+    }
+
+    turnTO = (path,event) => {
+        this.props.history.push(path);
     }
 
     render() {
@@ -54,40 +90,39 @@ export default class ResetPassword extends React.Component {
                             <Form>
                                 <FormCell>
                                     <CellBody>
-                                        <Input type="tel" placeholder="请输入用户名"/>
+                                        <Input type="tel" placeholder="请输入用户名" defaultValue={this.state.form.userName}  onBlur={this.handlerChange.bind(this,"userName")}/>
                                     </CellBody>
                                 </FormCell>
                                 <FormCell>
                                     <CellBody>
-                                        <Input type="password" placeholder="请输入新密码"/>
+                                        <Input type="password" placeholder="请输入新密码" defaultValue={this.state.form.password}  onBlur={this.handlerChange.bind(this,"password")}/>
                                     </CellBody>
                                 </FormCell>
                                 <FormCell>
                                     <CellBody>
-                                        <Input type="password" placeholder="请再次输入新密码"/>
+                                        <Input type="password" placeholder="请再次输入新密码" defaultValue={this.state.form.repeatPassword}  onBlur={this.handlerChange.bind(this,"repeatPassword")}/>
                                     </CellBody>
                                 </FormCell>
                                 <FormCell>
                                     <CellBody>
-                                        <Input type="tel" placeholder="请输入重置码"/>
+                                        <Input type="tel" placeholder="请输入重置码" defaultValue={this.state.form.proof}  onBlur={this.handlerChange.bind(this,"proof")}/>
                                     </CellBody>
                                 </FormCell>
                             </Form>
                             <ButtonArea>
                                 <Button
                                     //button to display toptips
-                                    onClick={e => {
-                                        if (this.state.showToptips) return;
-                                        this.setState({showToptips: !this.state.showToptips})
-                                        window.setTimeout(e => this.setState({showToptips: !this.state.showToptips}), 2000)
-                                    }
-                                    }>
+                                    onClick={(event) => { this.reset(); }}>
                                     确认重置
                                 </Button>
                             </ButtonArea>
-                            <ButtonArea>
-                                <Link to='/login'><Button type="default" size="normal">返回登录</Button></Link>
+                            <ButtonArea  direction="horizontal">
+                                <Button type="default" size="normal"  onClick={(event) => { this.turnTO('/getKey'); }}>获取重置码</Button>
+                                <Button type="default" size="normal"  onClick={(event) => { this.turnTO('/login'); }}>返回登录</Button>
                             </ButtonArea>
+
+                            <Toast icon="loading" show={this.state.showLoading}>重置中...</Toast>
+                            <Toptips type="warn" show={this.state.showWarn}> {this.state.warnMsg} </Toptips>
                         </div>
                     </FlexItem>
                 </Flex>

@@ -1,54 +1,75 @@
-import React, {Component} from 'react';
-import ReactDOM from 'react-dom';
+import React from 'react';
 import {
-    ButtonArea,
-    Button,
-    CellsTitle,
-    CellsTips,
-    Cell,
-    CellHeader,
-    CellBody,
-    CellFooter,
-    Form,
-    FormCell,
-    Icon,
-    Input,
-    Label,
-    TextArea,
-    Switch,
-    Radio,
-    Checkbox,
-    Select,
-    VCode,
-    Agreement,
-    Toptips,
     Flex,
     FlexItem,
-    Toast
+    Form,
+    FormCell,
+    CellBody,
+    Input,
+    ButtonArea,
+    Button,
+    Toast,
+    Toptips,
+    CellsTitle
 } from 'react-weui';
 import 'weui';
 import 'react-weui/build/packages/react-weui.css';
 import Page from "../page";
-import {Link} from "react-router-dom";
+import Post from "../../public/http_util";
 
 export default class Register extends React.Component {
 
     constructor(props) {
         super(props);
 
-        this.state = {}
+        this.state = {
+            showLoading: false,
+            showWarn: false,
+            warnMsg: '',
+            form : {
+                userName: '',
+                password: '',
+                realName: '',
+                repeatPassword: '',
+                telephone:'',
+                invitationCode:''
+            }
+        }
+    }
+
+    handlerChange = (p,event) => {
+        this.state.form[p] = event.target.value
+        console.log(this.state.form)
     }
 
     register() {
-
-    }
-
-    showLoading() {
         this.setState({showLoading: true});
 
-        this.state.loadingTimer = setTimeout(()=> {
+        var url = '/common/user/register';
+        var data = this.state.form;
+
+        Post(url,data).then(res => {
+            console.log(res);
             this.setState({showLoading: false});
-        }, 1000);
+            this.props.history.push('/home');
+        }).catch(err => {
+            console.log(err)
+            this.setState({showLoading: false});
+            this.showWarn(err);
+        });
+    }
+
+    showWarn(msg) {
+        this.setState({showWarn: true});
+        this.setState({warnMsg: msg});
+
+        this.state.warnTimer = setTimeout(()=> {
+            this.setState({showWarn: false});
+        }, 2000);
+    }
+
+    turnTO = (path,event) => {
+        this.props.history.push(path);
     }
 
     render() {
@@ -68,47 +89,49 @@ export default class Register extends React.Component {
                             <Form>
                                 <FormCell>
                                     <CellBody>
-                                        <Input type="tel" placeholder="请输入真实姓名"/>
+                                        <Input type="tel" placeholder="请输入真实姓名" defaultValue={this.state.form.realName}  onBlur={this.handlerChange.bind(this,"realName")}/>
                                     </CellBody>
                                 </FormCell>
                                 <FormCell>
                                     <CellBody>
-                                        <Input type="tel" placeholder="请输入手机号"/>
+                                        <Input type="tel" placeholder="请输入手机号" defaultValue={this.state.form.telephone}  onBlur={this.handlerChange.bind(this,"telephone")}/>
                                     </CellBody>
                                 </FormCell>
                                 <FormCell>
                                     <CellBody>
-                                        <Input type="tel" placeholder="请输入用户名"/>
+                                        <Input type="tel" placeholder="请输入用户名" defaultValue={this.state.form.userName} onBlur={this.handlerChange.bind(this,"userName")}/>
                                     </CellBody>
                                 </FormCell>
                                 <FormCell>
                                     <CellBody>
-                                        <Input type="password" placeholder="请输入密码"/>
+                                        <Input type="password" placeholder="请输入密码" defaultValue={this.state.form.password} onBlur={this.handlerChange.bind(this,"password")}/>
                                     </CellBody>
                                 </FormCell>
                                 <FormCell>
                                     <CellBody>
-                                        <Input type="password" placeholder="请再次输入密码"/>
+                                        <Input type="password" placeholder="请再次输入密码" defaultValue={this.state.form.repeatPassword} onBlur={this.handlerChange.bind(this,"repeatPassword")}/>
                                     </CellBody>
                                 </FormCell>
                                 <FormCell>
                                     <CellBody>
-                                        <Input type="tel" placeholder="请输入注册码"/>
+                                        <Input type="tel" placeholder="请输入注册码" defaultValue={this.state.form.invitationCode} onBlur={this.handlerChange.bind(this,"invitationCode")}/>
                                     </CellBody>
                                 </FormCell>
                             </Form>
                             <ButtonArea>
                                 <Button
                                     //button to display toptips
-                                    onClick={(event) => { this.register(); this.showLoading();}}>
+                                    onClick={(event) => { this.register();}}>
                                     注册
                                 </Button>
                             </ButtonArea>
-                            <ButtonArea>
-                                <Link to='/login'><Button type="default" size="normal">返回登录</Button></Link>
+                            <ButtonArea   direction="horizontal">
+                                <Button type="default" size="normal"  onClick={(event) => { this.turnTO('/getKey'); }}>获取注册码</Button>
+                                <Button type="default" size="normal"  onClick={(event) => { this.turnTO('/login'); }}>返回登录</Button>
                             </ButtonArea>
 
                             <Toast icon="loading" show={this.state.showLoading}>注册中...</Toast>
+                            <Toptips type="warn" show={this.state.showWarn}> {this.state.warnMsg} </Toptips>
                         </div>
                     </FlexItem>
                 </Flex>

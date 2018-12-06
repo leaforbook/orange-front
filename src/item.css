@@ -1,9 +1,11 @@
-.main_wrapper {
-    position: absolute;
-    width: 100%;
+
+
+.weui-tab {
+    position: static;
     height: 100%;
 }
-.header_wrapper {
-    position: absolute;
-    width: 100%;
+
+.fill_space {
+    position: static;
+    height: 30px;
 }

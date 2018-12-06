@@ -1,34 +1,21 @@
-import React, {Component} from 'react';
+import React from 'react';
 import {
-    ButtonArea,
-    Button,
-    CellsTitle,
-    CellsTips,
-    Cell,
-    CellHeader,
-    CellBody,
-    CellFooter,
-    Form,
-    FormCell,
-    Icon,
-    Input,
-    Label,
-    TextArea,
-    Switch,
-    Radio,
-    Checkbox,
-    Select,
-    VCode,
-    Agreement,
-    Toptips,
     Flex,
     FlexItem,
-    Toast
+    Form,
+    FormCell,
+    CellBody,
+    Input,
+    ButtonArea,
+    Button,
+    Toast,
+    Toptips,
+    CellsTitle
 } from 'react-weui';
 import 'weui';
 import 'react-weui/build/packages/react-weui.css';
 import Page from "../page";
-import Post from '../../public/http_util'
+import Post from '../../public/http_util';
 
 export default class Login extends React.Component {
 
