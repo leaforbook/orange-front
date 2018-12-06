@@ -95,7 +95,7 @@ export default class User extends React.Component {
         //this.props.history.push(path);
         this.props.history.push({
             pathname: path,
-                query:{userName:this.state.form.userName}
+            query:{userName:this.state.form.userName}
         })
     }
 
