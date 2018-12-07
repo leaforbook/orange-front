@@ -45,19 +45,37 @@ export default class User extends React.Component {
             showDialog: false,
         }
 
-        Post('/common/user/get').then(res => {
-            if(res.code === '0') {
-                this.setState({
-                    form : {
-                        userName: res.data.userName,
-                        realName: res.data.realName,
-                        telephone:res.data.telephone
-                    }
-                });
-            }
+    }
 
-        })
+    componentDidMount() {
+        var userInfo = localStorage.getItem("leaforbook-userInfo");
 
+        if(userInfo!=null && userInfo!=undefined && Object.keys(userInfo).length > 0) {
+            var json = JSON.parse(userInfo);
+            console.log(json.userName);
+            this.setState({
+                form : {
+                    userName: json.userName,
+                    realName: json.realName,
+                    telephone:json.telephone
+                }
+            });
+        } else {
+            Post('/common/user/get').then(res => {
+                if(res.code === '0') {
+                    this.setState({
+                        form : {
+                            userName: res.data.userName,
+                            realName: res.data.realName,
+                            telephone:res.data.telephone
+                        }
+                    });
+
+                    localStorage.setItem("leaforbook-userInfo",JSON.stringify(res.data))
+                }
+
+            })
+        }
     }
 
     hideDialog() {
@@ -72,11 +90,9 @@ export default class User extends React.Component {
 
     loginOut() {
         Post('/common/user/loginOut').then(res => {
-            if(res.code === '0') {
+                localStorage.removeItem("leaforbook-oneofus");
+                localStorage.removeItem("leaforbook-userInfo");
                 this.props.history.push('/login');
-            } else {
-                this.showWarn('退出失败：'+res.msg);
-            }
         }).catch(err => {
             this.showWarn('退出失败：'+err);
         });
@@ -92,8 +108,6 @@ export default class User extends React.Component {
     }
 
     turnTO = (path,event) => {
-        //this.props.history.push(path);
-
         this.props.history.push(path+"/"+this.state.form.userName);
     }
 

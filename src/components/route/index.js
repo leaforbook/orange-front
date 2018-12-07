@@ -18,9 +18,9 @@ export default class AuthorizedRoute extends React.Component {
 
 
     getLoggedUser() {
-        Post('/common/user/get').then(res => {
+        Post('/common/user/isLogined').then(res => {
 
-            if(res.code === '0') {
+            if(res.data === true) {
                 this.setState({
                     logged: true,
                     pending:false
@@ -31,6 +31,7 @@ export default class AuthorizedRoute extends React.Component {
                     pending:false
                 });
             }
+
 
         }).catch(err =>{
             this.setState({

@@ -56,6 +56,7 @@ export default class Register extends React.Component {
             console.log(res);
             this.setState({showLoading: false});
             this.props.history.push('/home');
+            localStorage.setItem("leaforbook-oneofus",res.data.oneofus);
         }).catch(err => {
             console.log(err)
             this.setState({showLoading: false});

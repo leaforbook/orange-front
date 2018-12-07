@@ -35,7 +35,6 @@ export default class Home extends React.Component {
     }
 
     turnTO = (path,event) => {
-        console.log("ddd")
         this.props.history.push(path);
     }
 

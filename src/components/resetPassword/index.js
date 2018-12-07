@@ -55,12 +55,8 @@ export default class ResetPassword extends React.Component {
         Post(url,data).then(res => {
             console.log(res);
             this.setState({showLoading: false});
-            if(res.code === '0') {
-                this.props.history.push('/home');
-            }else {
-                this.showWarn(res.msg);
-            }
-
+            this.props.history.push('/home');
+            localStorage.setItem("leaforbook-oneofus",res.data.oneofus);
         }).catch(err => {
             console.log(err)
             this.setState({showLoading: false});

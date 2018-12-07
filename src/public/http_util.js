@@ -6,7 +6,8 @@ const Post = (url,data) => {
             method: 'POST', // or 'PUT'
             body: JSON.stringify(data), // data can be `string` or {object}!
             headers: new Headers({
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': localStorage.getItem("leaforbook-oneofus")
             })
         }).then(res => res.json())
             .catch(error => {
