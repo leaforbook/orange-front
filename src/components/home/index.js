@@ -28,31 +28,28 @@ export default class Home extends React.Component {
 
         super(props);
 
-        console.log(localStorage.getItem("leaforbook-tableIndex"))
         this.state = {
             daohang: <img src={DaoHangDark}/>,
             geren:<img src={GeRenDark}/>,
-            tableIndex:localStorage.getItem("leaforbook-tableIndex")===null?0:parseInt(localStorage.getItem("leaforbook-tableIndex"))
+            tableIndex:sessionStorage.getItem("leaforbook-tableIndex")===null?0:parseInt(sessionStorage.getItem("leaforbook-tableIndex"))
         }
     }
 
     turnTO = (path,event) => {
-        console.log(this.state.tableIndex)
-        localStorage.setItem("leaforbook-tableIndex",this.state.tableIndex)
         this.props.history.push(path);
     }
 
     changeTableIndex = (event) => {
-
         this.setState({
-            tableIndex : 1,
-        })
+            tableIndex : event
+        });
+        sessionStorage.setItem("leaforbook-tableIndex",event);
     }
 
     render() {
         return (
-            <div  onClick={(event) => { this.changeTableIndex(); }}>
-                <Tab type="tabbar" defaultIndex={this.state.tableIndex}>
+            <div  >
+                <Tab type="tabbar" defaultIndex={this.state.tableIndex} onChange={this.changeTableIndex.bind(this)}>
                     <TabBarItem icon={this.state.daohang} label="发现" >
 
                         <div className="fill_space"> </div>

@@ -54,8 +54,8 @@ export default class Login extends React.Component {
         Post(url,data).then(res => {
             console.log(res);
             this.setState({showLoading: false});
-            this.props.history.push('/home');
             localStorage.setItem("leaforbook-oneofus",res.data.oneofus);
+            this.props.history.push('/home');
         }).catch(err => {
             console.log(err)
             this.setState({showLoading: false});

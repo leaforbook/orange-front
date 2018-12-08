@@ -62,18 +62,15 @@ export default class User extends React.Component {
             });
         } else {
             Post('/common/user/get').then(res => {
-                if(res.code === '0') {
-                    this.setState({
-                        form : {
-                            userName: res.data.userName,
-                            realName: res.data.realName,
-                            telephone:res.data.telephone
-                        }
-                    });
+                this.setState({
+                    form : {
+                        userName: res.data.userName,
+                        realName: res.data.realName,
+                        telephone:res.data.telephone
+                    }
+                });
 
-                    localStorage.setItem("leaforbook-userInfo",JSON.stringify(res.data))
-                }
-
+                localStorage.setItem("leaforbook-userInfo",JSON.stringify(res.data))
             })
         }
     }
@@ -108,7 +105,7 @@ export default class User extends React.Component {
     }
 
     turnTO = (path,event) => {
-        this.props.history.push(path+"/"+this.state.form.userName);
+        this.props.history.push(path);
     }
 
 
@@ -125,8 +122,11 @@ export default class User extends React.Component {
                     </PreviewBody>
                     <PreviewFooter>
                         <PreviewButton  onClick={ e=> this.setState({ showDialog: true}) }>安全退出</PreviewButton>
-                        <PreviewButton  onClick={(event) => { this.turnTO('/modify'); }}>修改密码</PreviewButton>
-                        <PreviewButton primary>修改信息</PreviewButton>
+                        <PreviewButton  onClick={(event) => { this.turnTO('/modify/'+this.state.form.userName); }}>修改密码</PreviewButton>
+                        <PreviewButton  onClick={(event) => { this.turnTO('/modifyUser/'+this.state.form.userName
+                                                            +'/'+this.state.form.realName
+                                                            +'/'+this.state.form.telephone
+                        ); }} primary>修改信息</PreviewButton>
                     </PreviewFooter>
                 </Preview>
 

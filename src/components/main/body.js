@@ -9,6 +9,7 @@ import ZanShangComponent from "../key/zanshang";
 import User from "../user";
 import ModifyPassword from "../modifyPassword";
 import AuthorizedRoute from '../route';
+import ModifyUserInfo from "../modifyUserInfo";
 
 
 export default class Body extends React.Component {
@@ -28,6 +29,7 @@ export default class Body extends React.Component {
                     <AuthorizedRoute path='/zanshang' component={ZanShangComponent}/>
                     <AuthorizedRoute path='/modify/:userName' component={ModifyPassword}/>
                     <AuthorizedRoute path='/user' component={User}/>
+                    <AuthorizedRoute path='/modifyUser/:userName/:realName/:telephone' component={ModifyUserInfo}/>
                 </Switch>
             </main>
         )
