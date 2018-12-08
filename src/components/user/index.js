@@ -89,6 +89,7 @@ export default class User extends React.Component {
         Post('/common/user/loginOut').then(res => {
                 localStorage.removeItem("leaforbook-oneofus");
                 localStorage.removeItem("leaforbook-userInfo");
+                sessionStorage.removeItem("leaforbook-tableIndex");
                 this.props.history.push('/login');
         }).catch(err => {
             this.showWarn('退出失败：'+err);
