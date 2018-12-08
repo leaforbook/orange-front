@@ -57,6 +57,7 @@ export default class ModifyUserInfo extends React.Component {
         var data = this.state.passwordForm;
 
         Post(url,data).then(res => {
+
             this.update();
 
         }).catch(err => {
