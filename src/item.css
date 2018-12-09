@@ -9,3 +9,9 @@
     position: static;
     height: 30px;
 }
+
+.fixd_in_bottom {
+    position:fixed;
+    bottom:0;
+    width:100%;
+}

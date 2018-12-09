@@ -56,7 +56,7 @@ export default class Home extends React.Component {
 
                         <CellsTitle></CellsTitle>
                         <Cells>
-                            <Cell access>
+                            <Cell access   onClick={(event) => { this.turnTO('/product/list'); }}>
                                 <CellHeader>
                                     <img src={ChanPin} alt="" style={{display: `block`, width: `20px`, marginRight: `5px`}}/>
                                 </CellHeader>
