@@ -126,6 +126,10 @@ export default class ProductList extends React.Component {
         })
     }
 
+    turnTO = (path,event) => {
+        this.props.history.push(path);
+    }
+
     render() {
         return (
             <div>
@@ -201,7 +205,7 @@ export default class ProductList extends React.Component {
 
                 <div className="fixd_in_bottom">
                     <ButtonArea   direction="horizontal">
-                        <Button>新增产品</Button>
+                        <Button  onClick={(event) => { this.turnTO('/product/edit'); }}>新增产品</Button>
                     </ButtonArea>
                 </div>
             </div>
