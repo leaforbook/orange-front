@@ -127,6 +127,7 @@ export default class ProductList extends React.Component {
     }
 
     turnTO = (path,event) => {
+        console.log(path)
         this.props.history.push(path);
     }
 
@@ -181,7 +182,7 @@ export default class ProductList extends React.Component {
                             <Cells>
                                 {this.state.productList.map((product,i) => {
                                     return (
-                                        <Cell access key={i}>
+                                        <Cell access key={i} onClick={(event) => { this.turnTO('/product/detail/'+product.productId); }}>
                                             <CellBody>
                                                 {product.productName}
                                             </CellBody>

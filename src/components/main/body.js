@@ -12,6 +12,8 @@ import AuthorizedRoute from '../route';
 import ModifyUserInfo from "../modifyUserInfo";
 import ProductList from "../product";
 import ProductEditor from "../product/edit";
+import ProductDetail from "../product/detail";
+import ProductGrant from "../product/grant";
 
 
 export default class Body extends React.Component {
@@ -34,6 +36,9 @@ export default class Body extends React.Component {
                     <AuthorizedRoute path='/modifyUser/:userName/:realName/:telephone' component={ModifyUserInfo}/>
                     <AuthorizedRoute path='/product/list' component={ProductList}/>
                     <AuthorizedRoute path='/product/edit' component={ProductEditor}/>
+                    <AuthorizedRoute path='/product/detail/:productId' component={ProductDetail}/>
+                    <AuthorizedRoute path='/product/grant/:productId/:productName' component={ProductGrant}/>
+
                 </Switch>
             </main>
         )
