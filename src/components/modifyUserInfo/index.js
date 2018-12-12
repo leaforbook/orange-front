@@ -161,7 +161,7 @@ export default class ModifyUserInfo extends React.Component {
                         <Form>
                             <FormCell>
                                 <CellBody>
-                                    <Input type="password" defaultValue={this.state.form.password}  placeholder="请输入密码" onBlur={this.handlerChangePassword.bind(this,"password")}/>
+                                    <Input type="password" defaultValue={this.state.passwordForm.password}  placeholder="请输入密码" onBlur={this.handlerChangePassword.bind(this,"password")}/>
                                 </CellBody>
                             </FormCell>
                         </Form>

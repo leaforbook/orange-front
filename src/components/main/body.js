@@ -35,7 +35,8 @@ export default class Body extends React.Component {
                     <AuthorizedRoute path='/user' component={User}/>
                     <AuthorizedRoute path='/modifyUser/:userName/:realName/:telephone' component={ModifyUserInfo}/>
                     <AuthorizedRoute path='/product/list' component={ProductList}/>
-                    <AuthorizedRoute path='/product/edit' component={ProductEditor}/>
+                    <AuthorizedRoute exact path='/product/edit' component={ProductEditor}/>
+                    <AuthorizedRoute path='/product/edit/:productId' component={ProductEditor}/>
                     <AuthorizedRoute path='/product/detail/:productId' component={ProductDetail}/>
                     <AuthorizedRoute path='/product/grant/:productId/:productName' component={ProductGrant}/>
 

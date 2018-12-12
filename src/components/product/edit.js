@@ -32,6 +32,9 @@ export default class ProductEditor extends React.Component {
         super(props);
 
         this.state = {
+            detailForm:{
+                productId:props.match.params.productId || '',
+            },
             tab:0,
             hiddenPanel:{
                 main:false,
@@ -39,6 +42,7 @@ export default class ProductEditor extends React.Component {
                 freight_attr:true
             },
             form:{
+                productId:props.match.params.productId || '',
                 productName:'',
                 productDesc:'',
                 priceAttribute:'',
@@ -52,6 +56,29 @@ export default class ProductEditor extends React.Component {
                 type:'',
                 value:['']
             }],
+        }
+    }
+
+    componentDidMount() {
+        if(this.state.detailForm.productId!='') {
+            var url = '/orange/product/detail';
+            var data = this.state.detailForm;
+
+            Post(url,data).then(res => {
+                this.state.form.productName = res.data.productName;
+                this.state.form.productDesc = res.data.productDesc;
+                this.state.form.priceAttribute = res.data.priceAttribute;
+                this.state.form.freightAttribute = res.data.freightAttribute;
+                this.state.priceAttribute = JSON.parse(res.data.priceAttribute);
+                this.state.freightAttribute = JSON.parse(res.data.freightAttribute);
+                this.setState({
+                    form:this.state.form,
+                    priceAttribute:this.state.priceAttribute,
+                    freightAttribute:this.state.freightAttribute
+                })
+            }).catch(err => {
+
+            });
         }
     }
 
@@ -186,12 +213,6 @@ export default class ProductEditor extends React.Component {
         })
     }
 
-    componentDidUpdate() {
-        console.log("arrp:",this.state.priceAttribute)
-        console.log("arrf:",this.state.freightAttribute)
-        console.log("form:",this.state.form)
-    }
-
     createProduct = (event) => {
         this.state.form.priceAttribute = JSON.stringify(this.state.priceAttribute)
         this.state.form.freightAttribute = JSON.stringify(this.state.freightAttribute)
@@ -200,6 +221,23 @@ export default class ProductEditor extends React.Component {
         })
 
         var url = '/orange/product/create';
+        var data = this.state.form;
+
+        Post(url,data).then(res => {
+
+        }).catch(err => {
+
+        });
+    }
+
+    updateProduct = (event) => {
+        this.state.form.priceAttribute = JSON.stringify(this.state.priceAttribute)
+        this.state.form.freightAttribute = JSON.stringify(this.state.freightAttribute)
+        this.setState({
+            form:this.state.form
+        })
+
+        var url = '/orange/product/update';
         var data = this.state.form;
 
         Post(url,data).then(res => {
@@ -233,7 +271,7 @@ export default class ProductEditor extends React.Component {
                                         </FormCell>
                                         <FormCell>
                                             <CellBody>
-                                                <TextArea placeholder="产品描述" rows="9" maxLength="2000"  defaultValue={this.state.form.productDesc} onBlur={this.handlerChange.bind(this,"productDesc")}></TextArea>
+                                                <TextArea placeholder="产品描述" rows="9" maxLength="2000"  value={this.state.form.productDesc} onBlur={this.handlerChange.bind(this,"productDesc")}></TextArea>
                                             </CellBody>
                                         </FormCell>
                                     </Form>
@@ -403,7 +441,13 @@ export default class ProductEditor extends React.Component {
 
                                     <ButtonArea  direction="horizontal">
                                         <Button type="default" onClick={(event) => { this.swithPage(2); }}>上一步</Button>
-                                        <Button type="default" onClick={(event) => { this.createProduct(); }}>创建产品</Button>
+                                        {
+                                            this.state.form.productId===''?
+                                                <Button type="default" onClick={(event) => { this.createProduct(); }}>创建产品</Button>
+                                                :
+                                                <Button type="default" onClick={(event) => { this.updateProduct(); }}>更新产品</Button>
+                                        }
+
                                     </ButtonArea>
 
                                 </div>
