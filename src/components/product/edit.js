@@ -17,14 +17,14 @@ import {
     PanelHeader,
     CellHeader,
     Label,
-    CellFooter
+    CellFooter,
+    Cell
 } from 'react-weui';
 import 'weui';
 import 'react-weui/build/packages/react-weui.css';
 import Page from "../page";
 import Post from '../../public/http_util';
 import "../../item.css";
-import {Cell} from "./index";
 
 export default class ProductEditor extends React.Component {
     constructor(props) {
@@ -79,7 +79,57 @@ export default class ProductEditor extends React.Component {
             }).catch(err => {
 
             });
+        }else {
+
+            var formInLocal = localStorage.getItem("leaforbook_productForm");
+            var form;
+            if(formInLocal!=null) {
+                form = JSON.parse(formInLocal);
+            }else {
+                form = this.state.form;
+            }
+
+            var priceInLocal = localStorage.getItem("leaforbook_product_priceAttribute");
+            var price;
+            if(priceInLocal!=null) {
+                price = JSON.parse(priceInLocal);
+            }else {
+                price = this.state.priceAttribute;
+            }
+
+
+            var freightInLocal = localStorage.getItem("leaforbook_product_freightAttribute");
+            var freight;
+            if(freightInLocal!=null) {
+                freight = JSON.parse(freightInLocal);
+            }else {
+                freight = this.state.freightAttribute;
+            }
+
+            this.setState({
+                form:form,
+                priceAttribute:price,
+                freightAttribute:freight,
+            })
+
+            this.intervalId = setInterval(()=> {
+                this.persistenceData();
+            },2000);
+
         }
+
+
+
+    }
+
+    persistenceData() {
+        localStorage.setItem("leaforbook_productForm",JSON.stringify(this.state.form));
+        localStorage.setItem("leaforbook_product_priceAttribute",JSON.stringify(this.state.priceAttribute))
+        localStorage.setItem("leaforbook_product_freightAttribute",JSON.stringify(this.state.freightAttribute))
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.intervalId);
     }
 
     handlerChange = (p,event) => {
@@ -225,6 +275,10 @@ export default class ProductEditor extends React.Component {
 
         Post(url,data).then(res => {
 
+            localStorage.removeItem("leaforbook_productForm");
+            localStorage.removeItem("leaforbook_product_priceAttribute");
+            localStorage.removeItem("leaforbook_product_freightAttribute");
+
         }).catch(err => {
 
         });
@@ -266,12 +320,12 @@ export default class ProductEditor extends React.Component {
                                     <Form>
                                         <FormCell>
                                             <CellBody>
-                                                <Input type="tel" defaultValue={this.state.form.productName} placeholder="产品名称" onBlur={this.handlerChange.bind(this,"productName")}/>
+                                                <Input defaultValue={this.state.form.productName} type="tel" placeholder="产品名称" onBlur={this.handlerChange.bind(this,"productName")}/>
                                             </CellBody>
                                         </FormCell>
                                         <FormCell>
                                             <CellBody>
-                                                <TextArea placeholder="产品描述" rows="9" maxLength="2000"  value={this.state.form.productDesc} onBlur={this.handlerChange.bind(this,"productDesc")}></TextArea>
+                                                <TextArea  defaultValue={this.state.form.productDesc} placeholder="产品描述" rows="9" maxLength={2000} onBlur={this.handlerChange.bind(this,"productDesc")}></TextArea>
                                             </CellBody>
                                         </FormCell>
                                     </Form>
