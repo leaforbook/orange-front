@@ -279,6 +279,8 @@ export default class ProductEditor extends React.Component {
             localStorage.removeItem("leaforbook_product_priceAttribute");
             localStorage.removeItem("leaforbook_product_freightAttribute");
 
+            this.props.history.push('/product/price/'+res.data);
+
         }).catch(err => {
 
         });
@@ -295,6 +297,8 @@ export default class ProductEditor extends React.Component {
         var data = this.state.form;
 
         Post(url,data).then(res => {
+
+            this.props.history.push('/product/price/'+this.state.detailForm.productId);
 
         }).catch(err => {
 
