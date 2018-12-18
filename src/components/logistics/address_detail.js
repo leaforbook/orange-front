@@ -16,7 +16,11 @@ import {
     Input,
     Popup,
     PopupHeader,
-    Toptips
+    Toptips,
+    Preview,
+    PreviewHeader,
+    PreviewItem,
+    PreviewBody
 
 } from 'react-weui';
 import 'weui';
@@ -26,15 +30,13 @@ import Post from '../../public/http_util';
 import "../../item.css";
 import "react-weui/build/packages/components/ptr/ptr.less";
 
-export default class ProductDetail extends React.Component {
-
-
+export default class AddressDetail extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
             form:{
-                productId:props.match.params.productId,
+                addressId:props.match.params.addressId,
             },
             result:{
 
@@ -44,10 +46,9 @@ export default class ProductDetail extends React.Component {
             passwordForm:{
                 password:''
             },
-            isCreater:false
         }
 
-        Post('/orange/product/detail',this.state.form).then(res => {
+        Post('/orange/address/get',this.state.form).then(res => {
 
             this.setState({
                 result:res.data,
@@ -58,20 +59,8 @@ export default class ProductDetail extends React.Component {
         })
     }
 
-
-    componentDidMount() {
-        if(this.state.form.productId!='') {
-            var url = '/orange/product/isCreater';
-            var data = this.state.form;
-
-            Post(url,data).then(res => {
-                this.setState({
-                    isCreater:res.data
-                })
-            }).catch(err => {
-
-            });
-        }
+    turnTO = (path,event) => {
+        this.props.history.push(path);
     }
 
     handlerChangePassword = (p,event) => {
@@ -84,28 +73,17 @@ export default class ProductDetail extends React.Component {
 
         Post(url,data).then(res => {
 
-            this.deleteProduct();
+            Post("/orange/address/delete",this.state.form).then(res => {
+                this.props.history.push('/logistics');
+            }).catch(err => {
+                this.showWarn(err);
+            });
 
         }).catch(err => {
-            console.log(err)
             this.showWarn(err);
         });
 
         this.setState({bottom_show: false});
-    }
-
-    turnTO = (path,event) => {
-        this.props.history.push(path);
-    }
-
-    deleteProduct = (event) =>  {
-        Post('/orange/product/delete',this.state.form).then(res => {
-
-            this.props.history.push("/product/list");
-
-        }).catch(err => {
-
-        })
     }
 
     showWarn(msg) {
@@ -117,38 +95,27 @@ export default class ProductDetail extends React.Component {
         }, 2000);
     }
 
-
     render() {
         return (
             <div>
 
-                <Page className="article" title="" subTitle="">
-                    <Article>
-                        <h1>{this.state.result.productName}</h1>
-                        <section>
-                            {this.state.result.productDesc}
-                        </section>
-                    </Article>
-                </Page>
+                <Preview>
+                    <PreviewHeader>
+                        <PreviewItem label="姓名" value={this.state.result.name +"  "+this.state.result.sex} />
+                    </PreviewHeader>
+                    <PreviewBody>
+                        <PreviewItem label="手机" value={this.state.result.telephone} />
+                        <PreviewItem label="省份" value={this.state.result.provinceName} />
+                        <PreviewItem label="地址" value={this.state.result.address} />
+                        <PreviewItem label="邮编" value={this.state.result.mailcode} />
+                        <PreviewItem label="备注" value={this.state.result.bak} />
+                    </PreviewBody>
+                </Preview>
 
                 <div className="fixd_in_bottom">
                     <ButtonArea   direction="horizontal">
-                        {
-                            this.state.isCreater &&
-                            <Button plain  onClick={(event)=>this.setState({bottom_show: true})}>删除</Button>
-                        }
-
-                        {
-                            this.state.isCreater &&
-                            <Button plain  onClick={(event) => { this.turnTO('/product/edit/'+this.state.form.productId); }}>修改</Button>
-                        }
-
-                        {
-                            this.state.isCreater &&
-                            <Button plain  onClick={(event) => { this.turnTO('/product/grant/'+this.state.form.productId+'/'+this.state.result.productName); }}>授权</Button>
-                        }
-
-                        <Button plain  onClick={(event) => { this.turnTO('/order/edit/'+this.state.form.productId); }}>下单</Button>
+                        <Button plain  onClick={(event)=>this.setState({bottom_show: true})}>删除</Button>
+                        <Button plain  onClick={(event) => { this.turnTO('/address/edit/'+this.state.form.addressId); }}>修改</Button>
                     </ButtonArea>
                 </div>
 
@@ -173,6 +140,7 @@ export default class ProductDetail extends React.Component {
                     </Form>
                     <div className="fill_space"></div>
                 </Popup>
+
             </div>
         )
     }

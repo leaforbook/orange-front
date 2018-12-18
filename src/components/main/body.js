@@ -17,6 +17,9 @@ import ProductGrant from "../product/grant";
 import ProductPrice from "../product/price";
 import ProductFreight from "../product/freight";
 import Logistics from "../logistics";
+import AddressEdit from "../logistics/address_edit";
+import AddressDetail from "../logistics/address_detail";
+import OrderEditor from "../order/order_edit";
 
 
 export default class Body extends React.Component {
@@ -45,6 +48,10 @@ export default class Body extends React.Component {
                     <AuthorizedRoute path='/product/price/:productId' component={ProductPrice}/>
                     <AuthorizedRoute path='/product/freight/:productId' component={ProductFreight}/>
                     <AuthorizedRoute path='/logistics' component={Logistics}/>
+                    <AuthorizedRoute exact path='/address/edit' component={AddressEdit}/>
+                    <AuthorizedRoute path='/address/edit/:addressId' component={AddressEdit}/>
+                    <AuthorizedRoute path='/address/detail/:addressId' component={AddressDetail}/>
+                    <AuthorizedRoute path='/order/edit/:productId' component={OrderEditor}/>
 
                 </Switch>
             </main>
