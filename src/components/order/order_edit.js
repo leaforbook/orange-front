@@ -231,7 +231,7 @@ export default class OrderEditor extends React.Component {
     submitOrder = (event) => {
         Post('/orange/order/create',this.state.form).then(res => {
 
-            this.props.history.push('/product/detail/'+this.state.queryForm.productId);
+            this.props.history.push('/order/detail/'+res.data);
 
         }).catch(err => {
 
