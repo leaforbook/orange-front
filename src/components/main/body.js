@@ -21,6 +21,7 @@ import AddressEdit from "../logistics/address_edit";
 import AddressDetail from "../logistics/address_detail";
 import OrderEditor from "../order/order_edit";
 import OrderDetail from "../order/order_detail";
+import OrderList from "../order";
 
 
 export default class Body extends React.Component {
@@ -54,6 +55,7 @@ export default class Body extends React.Component {
                     <AuthorizedRoute path='/address/detail/:addressId' component={AddressDetail}/>
                     <AuthorizedRoute path='/order/edit/:productId' component={OrderEditor}/>
                     <AuthorizedRoute path='/order/detail/:orderId' component={OrderDetail}/>
+                    <AuthorizedRoute path='/order/list' component={OrderList}/>
 
                 </Switch>
             </main>

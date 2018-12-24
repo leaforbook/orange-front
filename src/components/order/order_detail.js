@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom'
 import {
     Button,
     ButtonArea,
@@ -16,7 +17,12 @@ import {
     Input,
     Popup,
     PopupHeader,
-    Toptips
+    Toptips,
+    Preview,
+    PreviewHeader,
+    PreviewBody,
+    PreviewItem,
+    ActionSheet
 
 } from 'react-weui';
 import 'weui';
@@ -34,6 +40,18 @@ export default class OrderDetail extends React.Component {
             queryForm:{
                 orderId:props.match.params.orderId,
             },
+            updateForm:{
+                orderId:props.match.params.orderId,
+                orderStatus:'',
+            },
+            orderStatus:[
+                {name:"无需发货"},
+                {name:"未发货"},
+                {name:"已发货"},
+                {name:"已完成"},
+                {name:"退货中"},
+                {name:"退货完成"},
+            ],
             order:{
                 productId:'',
                 priceId:'',
@@ -45,7 +63,7 @@ export default class OrderDetail extends React.Component {
                 actualFreight:0,
                 totalCost:0,
                 deliveryDate:'',
-                orderStatus:'',
+                orderStatus:'1',
             },
             productQueryForm:{
                 productId:'',
@@ -89,8 +107,36 @@ export default class OrderDetail extends React.Component {
             },
             logistics:{
                 isShow:false,
-                value:{},
-            }
+                value:[],
+                nu:'',
+                com:'',
+            },
+            order_status_show:false,
+            menus: [{
+                label: '无需发货',
+                onClick: (event)=> {this.updateOrderStatus('1')}
+            }, {
+                label: '未发货',
+                onClick: (event)=> {this.updateOrderStatus('2')}
+            }, {
+                label: '已发货',
+                onClick: (event)=> {this.updateOrderStatus('3')}
+            },{
+                label: '已完成',
+                onClick: (event)=> {this.updateOrderStatus('4')}
+            }, {
+                label: '退货中',
+                onClick: (event)=> {this.updateOrderStatus('5')}
+            }, {
+                label: '退货完成',
+                onClick: (event)=> {this.updateOrderStatus('6')}
+            }],
+            actions: [
+                {
+                    label: '取消',
+                    onClick: this.hide.bind(this)
+                }
+            ]
         }
     }
 
@@ -151,11 +197,13 @@ export default class OrderDetail extends React.Component {
                 });
 
                 Post("/orange/logistics/get",this.state.queryForm).then(res => {
-                    if(res.data!=null&&res.data!=''&&res.data!=undefined) {
-                        this.state.address = res.data;
-                        this.state.address.isShow = true;
+                    if(res.data!=null&&res.data!=''&&res.data!=undefined&&res.data.message==='ok') {
+                        this.state.logistics.value = res.data.data;
+                        this.state.logistics.nu = res.data.nu;
+                        this.state.logistics.com = res.data.com;
+                        this.state.logistics.isShow = true;
                         this.setState({
-                            address:this.state.address,
+                            logistics:this.state.logistics,
                         })
                     }
 
@@ -171,36 +219,108 @@ export default class OrderDetail extends React.Component {
         setTimeout("this.componentDidMount()", 1000);
     }
 
+    hide(){
+        this.setState({
+            order_status_show: false,
+        });
+    }
+
+    updateOrderStatus = (i,event) => {
+        this.state.updateForm.orderStatus = i;
+        this.setState({
+            updateForm: this.state.updateForm,
+        })
+        Post('/orange/order/updateStatus',this.state.updateForm).then(res => {
+            this.state.order.orderStatus = i;
+            this.hide();
+        }).catch(err => {
+
+        })
+    }
+
     render() {
         return (
             <div>
 
                 <Page className="article" title="" subTitle="">
-                    <Article>
-                        <h1>订单编号：{this.state.queryForm.orderId}</h1>
-                        <section>
-                            <h2>{this.state.product.productName}</h2>
-                            <p>{this.state.price.attributeValue}</p>
-                            <p>{this.state.freight.attributeValue}</p>
-                            <p>购买数量：{this.state.order.amount}</p>
-                            <p>单价：{this.state.order.actualUnitPrice}元</p>
-                            <p>运费：{this.state.order.actualFreight}元</p>
-                            <p>总费用：{this.state.order.totalCost}元</p>
-                        </section>
+                    <Preview>
+                        <PreviewHeader>
+                            <PreviewItem label="订单详情" value="" />
+                        </PreviewHeader>
+                        <PreviewBody>
+                            <PreviewItem label="订单编号" value={this.state.queryForm.orderId+""} />
+                            <PreviewItem label="订单状态" value={
+                                this.state.orderStatus[parseInt(this.state.order.orderStatus)*1-1].name
+                            } />
+                            <PreviewItem label="产品" value={
+                                <Link to={'/product/detail/'+this.state.order.productId} activeClassName="active">{this.state.product.productName+""}</Link>
+                                } />
+                            <PreviewItem label="产品规格" value={this.state.price.attributeValue+""} />
+                            <PreviewItem label="运费规格" value={this.state.freight.attributeValue+""} />
+                            <PreviewItem label="购买数量" value={this.state.order.amount+""} />
+                            <PreviewItem label="单价" value={this.state.order.actualUnitPrice+"元"} />
+                            <PreviewItem label="运费" value={this.state.order.actualFreight+"元"} />
+                            <PreviewItem label="总费用" value={this.state.order.totalCost+"元"} />
+                        </PreviewBody>
+                    </Preview>
 
-                        <section hidden={!this.state.address.isShow}>
-                            <h2>收货人：{this.state.address.name}{this.state.address.sex}</h2>
-                            <p>{this.state.address.telephone}</p>
-                            <p>{this.state.address.provinceName}</p>
-                            <p>{this.state.address.address}</p>
-                            <p>{this.state.address.mailcode}</p>
-                            <p>{this.state.address.bak}</p>
-                        </section>
+                    <br/>
 
-                        <section hidden={!this.state.logistics.isShow}>
-                            <p>{this.state.logistics.isShow}</p>
-                        </section>
-                    </Article>
+                    <Preview  hidden={!this.state.address.isShow}>
+                        <PreviewHeader>
+                            <PreviewItem label="发货信息" value="" />
+                        </PreviewHeader>
+                        <PreviewBody>
+                            <PreviewItem label="收货人" value={this.state.address.name+" "+this.state.address.sex} />
+                            <PreviewItem label="手机" value={this.state.address.telephone+""} />
+                            <PreviewItem label="省份" value={this.state.address.provinceName+""} />
+                            <PreviewItem label="地址" value={this.state.address.address+""} />
+                            <PreviewItem label="邮编" value={this.state.address.mailcode+""} />
+                            <PreviewItem label="备注" value={this.state.address.bak+""} />
+                        </PreviewBody>
+                    </Preview>
+
+                    <br/>
+
+                    <Preview hidden={!this.state.logistics.isShow}>
+                        <PreviewHeader>
+                            <PreviewItem label="物流信息" value="" />
+                        </PreviewHeader>
+                        <PreviewBody>
+                            <PreviewItem label="物流公司" value={this.state.logistics.com+""} />
+                            <PreviewItem label="物流单号" value={this.state.logistics.nu+""} />
+                            <br/>
+                            {this.state.logistics.value.map( (item,i) => {
+                                return (
+                                    <div  key={i}>
+                                    <PreviewItem label={i+1} value={item.ftime +"    "+ item.context} />
+                                    <br/>
+                                    </div>
+                                )
+                            }) }
+
+                        </PreviewBody>
+                    </Preview>
+
+                    <br/>
+                    <br/>
+                    <br/>
+
+                    <div className="fixd_in_bottom">
+                        <ButtonArea   direction="horizontal">
+                            <Button  onClick={(event) => { this.setState({
+                                order_status_show:true,
+                            }) }}>修改订单状态</Button>
+                        </ButtonArea>
+                    </div>
+
+                    <ActionSheet
+                        menus={this.state.menus}
+                        actions={this.state.actions}
+                        show={this.state.order_status_show}
+                        type="ios"
+                        onRequestClose={e=>this.setState({order_status_show: false})}
+                    />
                 </Page>
 
             </div>

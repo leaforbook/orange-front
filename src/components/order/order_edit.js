@@ -161,7 +161,7 @@ export default class OrderEditor extends React.Component {
     }
 
     handlerChange = (p,event) => {
-        this.state.form[p] = event.target.value
+        this.state.form[p] = event.target.value;
         this.state.form.totalPrice = this.state.form.actualUnitPrice * this.state.form.amount;
         this.state.form.totalCost = this.state.form.actualUnitPrice * this.state.form.amount + this.state.form.actualFreight*1;
         this.setState({
