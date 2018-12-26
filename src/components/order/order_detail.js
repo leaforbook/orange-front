@@ -418,8 +418,14 @@ export default class OrderDetail extends React.Component {
 
                         <ButtonArea   direction="horizontal">
                             <Button plain type="default"  onClick={(event)=>this.setState({bottom_show: true})}>删除</Button>
+
                             {
-                                this.state.order.orderStatus==='2'||this.state.order.orderStatus==='3' &&
+                                this.state.order.orderStatus==='2' &&
+                                <Button plain type="default"  onClick={(event)=>this.setState({bottom_show1: true})}>发货</Button>
+                            }
+
+                            {
+                                this.state.order.orderStatus==='3' &&
                                 <Button plain type="default"  onClick={(event)=>this.setState({bottom_show1: true})}>发货</Button>
                             }
 
