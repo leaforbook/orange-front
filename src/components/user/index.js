@@ -81,9 +81,6 @@ export default class User extends React.Component {
         });
     }
 
-    goBack () {
-        this.props.history.goBack();
-    }
 
     loginOut() {
         Post('/common/user/loginOut').then(res => {
@@ -131,11 +128,6 @@ export default class User extends React.Component {
                     </PreviewFooter>
                 </Preview>
 
-                <ButtonArea>
-                    <Button  type="default" onClick={(event) => { this.goBack(); }}>
-                        返回
-                    </Button>
-                </ButtonArea>
 
                 <Toptips type="warn" show={this.state.showWarn}> {this.state.warnMsg} </Toptips>
 

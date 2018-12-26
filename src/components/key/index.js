@@ -15,16 +15,6 @@ export default class GetKey extends React.Component {
     constructor(props) {
 
         super(props);
-        this.goBack = this.goBack.bind(this);
-
-    }
-
-    goBack () {
-        this.props.history.goBack();
-    }
-
-    goToHome() {
-        this.props.history.push("/home");
     }
 
     render() {
@@ -52,11 +42,6 @@ export default class GetKey extends React.Component {
                         </section>
                     </section>
                 </Article>
-
-                <ButtonArea  direction="horizontal">
-                    <Button type="default" onClick={(event) => { this.goToHome(); }}>首页</Button>
-                    <Button type="default" onClick={(event) => { this.goBack(); }}>返回</Button>
-                </ButtonArea>
 
                 <div className="fill_space"></div>
 

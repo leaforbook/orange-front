@@ -122,7 +122,7 @@ export default class ProductGrant extends React.Component {
                                     <Form>
                                         <FormCell>
                                             <CellBody>
-                                                <TextArea placeholder="授权给其他用户" rows="9" maxLength={200}  defaultValue={this.state.form.userName} onChange={this.handlerChange.bind(this,"userName")}></TextArea>
+                                                <TextArea placeholder="授权给其他用户" rows="9" maxLength={200}  value={this.state.form.userName} onChange={this.handlerChange.bind(this,"userName")}></TextArea>
                                             </CellBody>
 
                                         </FormCell>

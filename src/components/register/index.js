@@ -132,7 +132,7 @@ export default class Register extends React.Component {
                             </ButtonArea>
                             <ButtonArea   direction="horizontal">
                                 <Button type="default" size="normal"  onClick={(event) => { this.turnTO('/getKey'); }}>获取注册码</Button>
-                                <Button type="default" size="normal"  onClick={(event) => { this.turnTO('/login'); }}>返回登录</Button>
+                                <Button type="default" size="normal"  onClick={(event) => { this.turnTO('/login'); }}>去登录</Button>
                             </ButtonArea>
 
                             <Toast icon="loading" show={this.state.showLoading}>注册中...</Toast>

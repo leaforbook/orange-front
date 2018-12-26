@@ -134,9 +134,10 @@ export default class ProductEditor extends React.Component {
 
     handlerChange = (p,event) => {
         this.state.form[p] = event.target.value
-        console.log(this.state.form)
+        this.setState({
+            form:this.state.form,
+        })
     }
-
 
     swithPage = (index,event) => {
         if(index===1) {
@@ -329,7 +330,7 @@ export default class ProductEditor extends React.Component {
                                         </FormCell>
                                         <FormCell>
                                             <CellBody>
-                                                <TextArea  defaultValue={this.state.form.productDesc} placeholder="产品描述" rows="9" maxLength={2000} onBlur={this.handlerChange.bind(this,"productDesc")}></TextArea>
+                                                <TextArea  value={this.state.form.productDesc} placeholder="产品描述" rows="9" maxLength={2000} onChange={this.handlerChange.bind(this,"productDesc")}></TextArea>
                                             </CellBody>
                                         </FormCell>
                                     </Form>

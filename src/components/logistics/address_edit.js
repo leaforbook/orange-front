@@ -196,12 +196,12 @@ export default class AddressEdit extends React.Component {
                                     </FormCell>
                                     <FormCell>
                                         <CellBody>
-                                            <Input type="tel" defaultValue={this.state.form.address}  placeholder="详细地址" onBlur={this.handlerChange.bind(this,"address")}/>
+                                            <TextArea placeholder="详细地址" rows="2" maxLength={100}  value={this.state.form.address} onChange={this.handlerChange.bind(this,"address")}></TextArea>
                                         </CellBody>
                                     </FormCell>
                                     <FormCell>
                                         <CellBody>
-                                            <Input type="text" rows="10" defaultValue={this.state.form.bak}  placeholder="备注" onBlur={this.handlerChange.bind(this,"bak")}/>
+                                            <TextArea placeholder="备注" rows="2" maxLength={200}  value={this.state.form.bak} onChange={this.handlerChange.bind(this,"bak")}></TextArea>
                                         </CellBody>
                                     </FormCell>
                                 </Form>
