@@ -112,7 +112,10 @@ export default class AddressEdit extends React.Component {
     }
 
     handlerChange = (p,event) => {
-        this.state.form[p] = event.target.value
+        this.state.form[p] = event.target.value;
+        this.setState({
+            form:this.state.form,
+        })
     }
 
     createAddress = (event) => {
