@@ -18,6 +18,16 @@ import {
     MediaBox,
     MediaBoxTitle,
     MediaBoxDescription,
+    Checkbox,
+    Form,
+    FormCell,
+    Select,
+    CellHeader,
+    Input,
+    Popup,
+    PopupHeader,
+    Picker,
+    Toptips,
 } from 'react-weui';
 import 'weui';
 import 'react-weui/build/packages/react-weui.css';
@@ -25,6 +35,7 @@ import Page from "../page";
 import Post from '../../public/http_util';
 import "../../item.css";
 import "react-weui/build/packages/components/ptr/ptr.less";
+import moment from "moment";
 
 export default class Logistics extends React.Component {
 
@@ -43,6 +54,35 @@ export default class Logistics extends React.Component {
             },
             isFinish:false,
             tableIndex:sessionStorage.getItem("leaforbook-logistics-tableIndex")===null?0:parseInt(sessionStorage.getItem("leaforbook-logistics-tableIndex")),
+            orderList:[],
+            isOrderFinish:false,
+            orderQueryForm:{
+                orderStatus:'2',
+                pageSize:20,
+                pageNum:1,
+            },
+            bottom_show1:false,
+            logisticsForm:{
+                postid:'',
+                type:'',
+                name:'',
+                orderIdList:[],
+                addressIdList:[],
+            },
+            logistics_coms:[
+                {
+                    items:[
+
+                    ]
+                }
+            ],
+            logistics_show:false,
+            expressForm:{
+                inCommonUse:'1',
+            },
+            canDeliver:true,
+            showWarn: false,
+            warnMsg:'',
         }
     }
 
@@ -63,6 +103,110 @@ export default class Logistics extends React.Component {
         }).catch(err => {
 
         })
+
+        var logistics = sessionStorage.getItem("leaforbook-logistics-1");
+        if(logistics!=null&&logistics!=undefined) {
+            this.state.logistics_coms[0].items = JSON.parse(logistics);
+            this.setState({
+                logistics_coms: this.state.logistics_coms,
+            })
+        } else {
+            var url = '/common/express/get';
+
+            Post(url,this.state.expressForm).then(res => {
+                sessionStorage.setItem("leaforbook-logistics-1",JSON.stringify(res.data))
+                this.state.logistics_coms[0].items = res.data;
+                this.setState({
+                    logistics_coms: this.state.logistics_coms,
+                })
+            }).catch(err => {
+
+            });
+        }
+
+        Post('/orange/order/query',this.state.orderQueryForm).then(res => {
+
+            this.state.orderList = res.data;
+
+            this.setState({
+                orderList:this.state.orderList,
+            });
+
+        }).catch(err => {
+
+        })
+    }
+
+    searchOrder = (event) =>  {
+
+        console.log(event.target.value)
+        this.state.value = event.target.value
+
+        this.state.orderQueryForm.orderStatus = event.target.value;
+        this.state.orderQueryForm.pageNum = 1;
+        this.setState({
+            orderQueryForm:this.state.orderQueryForm,
+            isOrderFinish:false,
+        })
+
+        Post('/orange/order/query',this.state.orderQueryForm).then(res => {
+
+            this.state.orderList = res.data;
+
+            this.setState({
+                orderList:this.state.orderList,
+            });
+
+        }).catch(err => {
+
+        })
+    }
+
+    refreshOrderList = (event) => {
+        this.state.orderQueryForm.pageNum = 1;
+        this.setState({
+            orderQueryForm : this.state.orderQueryForm,
+            isOrderFinish:false,
+        })
+
+        Post('/orange/order/query',this.state.orderQueryForm).then(res => {
+
+            this.state.orderList = res.data;
+
+            this.setState({
+                orderList:this.state.orderList,
+            });
+
+        }).catch(err => {
+
+        })
+    }
+
+    concatOrderList = (event) => {
+        this.state.orderQueryForm.pageNum = this.state.orderQueryForm.pageNum+1;
+        this.setState({
+            orderQueryForm : this.state.orderQueryForm,
+        })
+
+        Post('/orange/order/query',this.state.orderQueryForm).then(res => {
+
+            if(res.data.length <= 0) {
+                this.setState({
+                    isOrderFinish:true,
+                });
+            } else {
+                this.setState({
+                    orderList:this.state.orderList.concat(res.data),
+                });
+            }
+
+        }).catch(err => {
+
+        })
+    }
+
+    handlerChangeLogistics = (p,event) => {
+        this.state.logisticsForm[p] = event.target.value
     }
 
     searchAddress = (queryParams,event) =>  {
@@ -138,6 +282,78 @@ export default class Logistics extends React.Component {
         sessionStorage.setItem("leaforbook-logistics-tableIndex",event);
     }
 
+    changeCheckBox =(orderId,i,event) => {
+
+        if(event.target.checked) {
+            this.state.logisticsForm.orderIdList =  this.state.logisticsForm.orderIdList.concat(orderId);
+            this.state.logisticsForm.addressIdList =  this.state.logisticsForm.addressIdList.concat(this.state.orderList[i].addressId);
+            this.setState({
+                logisticsForm:this.state.logisticsForm,
+            })
+        }else {
+            var index = this.findIndex(this.state.logisticsForm.orderIdList,orderId)
+            this.state.logisticsForm.orderIdList.splice(index,1)
+            this.state.logisticsForm.addressIdList.splice(index,1)
+            this.setState({
+                logisticsForm:this.state.logisticsForm,
+            })
+        }
+
+        this.state.canDeliver = this.canDeliver(this.state.logisticsForm.addressIdList);
+
+    }
+
+    canDeliver(addressIdList) {
+        if(addressIdList.length<=0) {
+            return true;
+        }else if(addressIdList.length===1) {
+            return false;
+        }else {
+            var addressId = addressIdList[0];
+            for(var i=1;i<addressIdList.length;i++) {
+                if(addressIdList[i]!=addressId) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    findIndex (arr,item) {
+        for(var i=0;i<arr.length;i++) {
+            if(arr[i]===item) {
+                return i;
+            }
+        }
+    }
+
+    createLogistics = (event) => {
+        var url = '/orange/logistics/create';
+        var data = this.state.logisticsForm;
+
+        this.setState({bottom_show1: false});
+
+        Post(url,data).then(res => {
+
+            this.componentWillMount();
+
+        }).catch(err => {
+            this.showWarn(err);
+        });
+
+
+    }
+
+    showWarn(msg) {
+        this.setState({showWarn: true});
+        this.setState({warnMsg: msg});
+
+        this.state.warnTimer = setTimeout(()=> {
+            this.setState({showWarn: false});
+        }, 2000);
+    }
+
     render() {
         return (
             <div>
@@ -145,7 +361,142 @@ export default class Logistics extends React.Component {
                 <Tab type="navbar" onChange={this.changeTableIndex.bind(this)}  defaultIndex={this.state.tableIndex}>
                     <NavBarItem label="发货">
 
-                        111
+                        <InfiniteLoader
+                            onLoadMore={ (event, finish) => {
+
+                                this.concatOrderList();
+
+                                {
+                                    if(this.state.isOrderFinish){
+                                        finish()
+                                    }else{
+                                        event()
+                                    }
+                                }
+
+                            }}
+                            disable={this.state.isOrderFinish}
+                        >
+                            <Page className="ptr" title="" subTitle="">
+
+
+                                <PullToRefresh
+
+                                    onRefresh={(event) => {
+
+                                        this.refreshOrderList();
+
+                                        {
+                                            //mock add item after 1s and then resolve
+                                            setTimeout(()=>{
+                                                this.setState({
+
+                                                }, ()=> event())
+                                            }, 1000)
+                                        }
+                                    }}
+                                >
+
+                                    <CellsTitle>待发货订单列表</CellsTitle>
+
+                                    <Cells>
+                                        {this.state.orderList.map((order,i) => {
+                                            return (
+                                                <div key={i} >
+                                                    <Panel>
+                                                        <Form checkbox>
+                                                            <FormCell checkbox>
+                                                                <CellHeader>
+                                                                    <Checkbox name="checkbox" value={i} onChange={event => this.changeCheckBox(order.orderId,i,event)} />
+                                                                </CellHeader>
+                                                                <CellBody>
+                                                                    {order.orderId}
+                                                                </CellBody>
+                                                            </FormCell>
+                                                        </Form>
+                                                    </Panel>
+                                                    <Panel  access onClick={(event) => { this.turnTO('/order/detail/'+order.orderId); }}>
+                                                        <PanelBody>
+                                                            <MediaBox type="text">
+                                                                <MediaBoxTitle>{order.productName}&nbsp;&nbsp;&nbsp;&nbsp;{"未发货"}</MediaBoxTitle>
+                                                                <MediaBoxDescription>
+                                                                    {order.orderId}<br/>{order.price+" "}{order.freight} <br/>{"单价："+order.actualUnitPrice+"元 "}{"数量："+order.amount+" "}{"运费："+order.actualFreight+"元 "}{"总费用："+ order.totalCost+"元"} <br/>{"收货人："}{order.name===null?'':order.name}<br/> {moment(order.dateUpdate).format('YYYY-MM-DD HH:mm:ss')}
+                                                                </MediaBoxDescription>
+                                                            </MediaBox>
+                                                        </PanelBody>
+                                                    </Panel>
+                                                </div>
+                                            )
+
+                                        })}
+
+                                    </Cells>
+
+                                </PullToRefresh>
+                            </Page>
+                        </InfiniteLoader>
+
+                        <div className="fill_space"></div>
+                        <div className="fill_space"></div>
+                        <div className="fill_space"></div>
+
+                        <div className="fixd_in_bottom">
+                            <ButtonArea   direction="horizontal">
+                                <Button disabled={this.state.canDeliver}  onClick={(event)=>this.setState({bottom_show1: true})}>发货</Button>
+                            </ButtonArea>
+                        </div>
+
+                        <Popup
+                            show={this.state.bottom_show1}
+                            onRequestClose={(event)=>this.setState({bottom_show1: false})}
+                        >
+                            <PopupHeader
+                                left="取消"
+                                right="确认"
+                                leftOnClick={(event)=>this.setState({bottom_show1: false})}
+                                rightOnClick={(event) => { this.createLogistics(this); }}
+                            />
+                            <Form>
+                                <FormCell>
+                                    <CellBody>
+                                        <Input type="text"
+                                               value={this.state.logisticsForm.name}
+                                               onClick={ e=> {
+                                                   //e.preventDefault();
+                                                   this.setState({logistics_show: true})
+                                               }}
+                                               placeholder="请选择物流公司"
+                                               readOnly={true}
+                                        />
+                                        <br/>
+                                        <Input type="text" defaultValue={this.state.logisticsForm.postid}  placeholder="请输入物流单号" onBlur={this.handlerChangeLogistics.bind(this,"postid")}/>
+                                    </CellBody>
+                                </FormCell>
+                            </Form>
+                            <div className="fill_space"></div>
+                        </Popup>
+
+                        <Picker
+                            onChange={selected=>{
+                                let value = ''
+                                let type = ''
+                                selected.forEach( (s,i)=> {
+                                    value = this.state.logistics_coms[i]['items'][s].label;
+                                    type = this.state.logistics_coms[i]['items'][s].expressId;
+                                })
+                                this.state.logisticsForm.name = value;
+                                this.state.logisticsForm.type = type;
+                                this.setState({
+                                    logisticsForm:this.state.logisticsForm,
+                                    logistics_show: false
+                                })
+                            }}
+                            groups={this.state.logistics_coms}
+                            show={this.state.logistics_show}
+                            onCancel={e=>this.setState({logistics_show: false})}
+                        />
+
+                        <Toptips type="warn" show={this.state.showWarn}> {this.state.warnMsg} </Toptips>
 
                     </NavBarItem>
 

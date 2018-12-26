@@ -22,7 +22,8 @@ import {
     PreviewHeader,
     PreviewBody,
     PreviewItem,
-    ActionSheet
+    ActionSheet,
+    Picker,
 
 } from 'react-weui';
 import 'weui';
@@ -31,6 +32,7 @@ import Page from "../page";
 import Post from '../../public/http_util';
 import "../../item.css";
 import "react-weui/build/packages/components/ptr/ptr.less";
+import moment from "moment";
 
 export default class OrderDetail extends React.Component {
     constructor(props) {
@@ -136,7 +138,31 @@ export default class OrderDetail extends React.Component {
                     label: '取消',
                     onClick: this.hide.bind(this)
                 }
-            ]
+            ],
+            bottom_show:false,
+            passwordForm:{
+                password:''
+            },
+            showWarn: false,
+            warnMsg:'',
+            logisticsForm:{
+                postid:'',
+                type:'',
+                name:'',
+                orderIdList:[props.match.params.orderId],
+            },
+            bottom_show1:false,
+            logistics_coms:[
+                {
+                    items:[
+
+                    ]
+                }
+            ],
+            logistics_show:false,
+            expressForm:{
+                inCommonUse:'1',
+            }
         }
     }
 
@@ -216,7 +242,27 @@ export default class OrderDetail extends React.Component {
 
         });
 
-        setTimeout("this.componentDidMount()", 1000);
+
+        var logistics = sessionStorage.getItem("leaforbook-logistics-1");
+        if(logistics!=null&&logistics!=undefined) {
+            this.state.logistics_coms[0].items = JSON.parse(logistics);
+            this.setState({
+                logistics_coms: this.state.logistics_coms,
+            })
+        } else {
+            var url = '/common/express/get';
+
+            Post(url,this.state.expressForm).then(res => {
+                sessionStorage.setItem("leaforbook-logistics-1",JSON.stringify(res.data))
+                this.state.logistics_coms[0].items = res.data;
+                this.setState({
+                    logistics_coms: this.state.logistics_coms,
+                })
+            }).catch(err => {
+
+            });
+        }
+
     }
 
     hide(){
@@ -233,6 +279,67 @@ export default class OrderDetail extends React.Component {
         Post('/orange/order/updateStatus',this.state.updateForm).then(res => {
             this.state.order.orderStatus = i;
             this.hide();
+        }).catch(err => {
+
+        })
+    }
+
+    handlerChangePassword = (p,event) => {
+        this.state.passwordForm[p] = event.target.value
+    }
+
+    handlerChangeLogistics = (p,event) => {
+        this.state.logisticsForm[p] = event.target.value
+    }
+
+    verifyPassword = (event) => {
+        var url = '/common/user/verifyPassword';
+        var data = this.state.passwordForm;
+
+        Post(url,data).then(res => {
+
+            this.deleteOrder();
+
+        }).catch(err => {
+            console.log(err)
+            this.showWarn(err);
+        });
+
+        this.setState({bottom_show: false});
+    }
+
+
+    createLogistics = (event) => {
+        var url = '/orange/logistics/create';
+        var data = this.state.logisticsForm;
+
+        this.setState({bottom_show1: false});
+
+        Post(url,data).then(res => {
+
+            this.componentWillMount();
+
+        }).catch(err => {
+            this.showWarn(err);
+        });
+
+
+    }
+
+    showWarn(msg) {
+        this.setState({showWarn: true});
+        this.setState({warnMsg: msg});
+
+        this.state.warnTimer = setTimeout(()=> {
+            this.setState({showWarn: false});
+        }, 2000);
+    }
+
+    deleteOrder = (event) =>  {
+        Post('/orange/order/delete',this.state.queryForm).then(res => {
+
+            this.props.history.push("/order/list");
+
         }).catch(err => {
 
         })
@@ -261,6 +368,7 @@ export default class OrderDetail extends React.Component {
                             <PreviewItem label="单价" value={this.state.order.actualUnitPrice+"元"} />
                             <PreviewItem label="运费" value={this.state.order.actualFreight+"元"} />
                             <PreviewItem label="总费用" value={this.state.order.totalCost+"元"} />
+                            <PreviewItem label="预计发货" value={moment(this.state.order.deliveryDate).format('YYYY-MM-DD HH:mm:ss')} />
                         </PreviewBody>
                     </Preview>
 
@@ -294,7 +402,7 @@ export default class OrderDetail extends React.Component {
                                 return (
                                     <div  key={i}>
                                     <PreviewItem label={i+1} value={item.ftime +"    "+ item.context} />
-                                    <br/>
+
                                     </div>
                                 )
                             }) }
@@ -307,10 +415,21 @@ export default class OrderDetail extends React.Component {
                     <br/>
 
                     <div className="fixd_in_bottom">
+
                         <ButtonArea   direction="horizontal">
-                            <Button  onClick={(event) => { this.setState({
-                                order_status_show:true,
-                            }) }}>修改订单状态</Button>
+                            <Button plain type="default"  onClick={(event)=>this.setState({bottom_show: true})}>删除</Button>
+                            {
+                                this.state.order.orderStatus==='2'||this.state.order.orderStatus==='3' &&
+                                <Button plain type="default"  onClick={(event)=>this.setState({bottom_show1: true})}>发货</Button>
+                            }
+
+                            {
+                                this.state.order.orderStatus!='1' &&
+                                <Button plain  onClick={(event) => { this.setState({
+                                    order_status_show:true,
+                                }) }}>修改状态</Button>
+                            }
+
                         </ButtonArea>
                     </div>
 
@@ -322,6 +441,78 @@ export default class OrderDetail extends React.Component {
                         onRequestClose={e=>this.setState({order_status_show: false})}
                     />
                 </Page>
+
+                <Toptips type="warn" show={this.state.showWarn}> {this.state.warnMsg} </Toptips>
+
+                <Popup
+                    show={this.state.bottom_show}
+                    onRequestClose={(event)=>this.setState({bottom_show: false})}
+                >
+                    <PopupHeader
+                        left="取消"
+                        right="确认"
+                        leftOnClick={(event)=>this.setState({bottom_show: false})}
+                        rightOnClick={(event) => { this.verifyPassword(this); }}
+                    />
+                    <Form>
+                        <FormCell>
+                            <CellBody>
+                                <Input type="password" defaultValue={this.state.passwordForm.password}  placeholder="请输入密码" onBlur={this.handlerChangePassword.bind(this,"password")}/>
+                            </CellBody>
+                        </FormCell>
+                    </Form>
+                    <div className="fill_space"></div>
+                </Popup>
+
+                <Popup
+                    show={this.state.bottom_show1}
+                    onRequestClose={(event)=>this.setState({bottom_show1: false})}
+                >
+                    <PopupHeader
+                        left="取消"
+                        right="确认"
+                        leftOnClick={(event)=>this.setState({bottom_show1: false})}
+                        rightOnClick={(event) => { this.createLogistics(this); }}
+                    />
+                    <Form>
+                        <FormCell>
+                            <CellBody>
+                                <Input type="text"
+                                       value={this.state.logisticsForm.name}
+                                       onClick={ e=> {
+                                           //e.preventDefault();
+                                           this.setState({logistics_show: true})
+                                       }}
+                                       placeholder="请选择物流公司"
+                                       readOnly={true}
+                                />
+                                <br/>
+                                <Input type="text" defaultValue={this.state.logisticsForm.postid}  placeholder="请输入物流单号" onBlur={this.handlerChangeLogistics.bind(this,"postid")}/>
+                            </CellBody>
+                        </FormCell>
+                    </Form>
+                    <div className="fill_space"></div>
+                </Popup>
+
+                <Picker
+                    onChange={selected=>{
+                        let value = ''
+                        let type = ''
+                        selected.forEach( (s,i)=> {
+                            value = this.state.logistics_coms[i]['items'][s].label;
+                            type = this.state.logistics_coms[i]['items'][s].expressId;
+                        })
+                        this.state.logisticsForm.name = value;
+                        this.state.logisticsForm.type = type;
+                        this.setState({
+                            logisticsForm:this.state.logisticsForm,
+                            logistics_show: false
+                        })
+                    }}
+                    groups={this.state.logistics_coms}
+                    show={this.state.logistics_show}
+                    onCancel={e=>this.setState({logistics_show: false})}
+                />
 
             </div>
         )

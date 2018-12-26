@@ -26,6 +26,7 @@ import Page from "../page";
 import Post from '../../public/http_util';
 import "../../item.css";
 import "react-weui/build/packages/components/ptr/ptr.less";
+import moment from 'moment';
 
 export default class OrderList extends React.Component {
     constructor(props) {
@@ -41,6 +42,14 @@ export default class OrderList extends React.Component {
                 pageNum:1,
             },
             value:'',
+            orderStatus:[
+                {name:"无需发货"},
+                {name:"未发货"},
+                {name:"已发货"},
+                {name:"已完成"},
+                {name:"退货中"},
+                {name:"退货完成"},
+            ],
         }
     }
 
@@ -175,7 +184,7 @@ export default class OrderList extends React.Component {
                                 <FormCell select>
                                     <CellBody>
                                         <Select value={this.state.value}  onChange={(event)=> {this.searchOrder(event)}}>
-                                            <option value="">请选择</option>
+                                            <option value="">请选择订单状态</option>
                                             <option value="1">无需发货</option>
                                             <option value="2">未发货</option>
                                             <option value="3">已发货</option>
@@ -193,9 +202,9 @@ export default class OrderList extends React.Component {
                                         <Panel  access key={i} onClick={(event) => { this.turnTO('/order/detail/'+order.orderId); }}>
                                             <PanelBody>
                                                 <MediaBox type="text">
-                                                    <MediaBoxTitle>{order.orderId}</MediaBoxTitle>
+                                                    <MediaBoxTitle>{order.productName}&nbsp;&nbsp;&nbsp;&nbsp;{this.state.orderStatus[parseInt(order.orderStatus)*1-1].name}</MediaBoxTitle>
                                                     <MediaBoxDescription>
-                                                        {order.productName} <br/>{"数量："+order.amount} <br/>{order.name}<br/> {new Date(order.dateUpdate)}
+                                                        {order.orderId}<br/>{order.price+" "}{order.freight} <br/>{"单价："+order.actualUnitPrice+"元 "}{"数量："+order.amount+" "}{"运费："+order.actualFreight+"元 "}{"总费用："+ order.totalCost+"元"} <br/>{"收货人："}{order.name===null?'':order.name}<br/> {moment(order.dateUpdate).format('YYYY-MM-DD HH:mm:ss')}
                                                     </MediaBoxDescription>
                                                 </MediaBox>
                                             </PanelBody>
