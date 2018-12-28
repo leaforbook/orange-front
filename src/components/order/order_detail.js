@@ -332,7 +332,7 @@ export default class OrderDetail extends React.Component {
 
         this.state.warnTimer = setTimeout(()=> {
             this.setState({showWarn: false});
-        }, 2000);
+        }, 10000);
     }
 
     deleteOrder = (event) =>  {

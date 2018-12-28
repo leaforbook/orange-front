@@ -74,7 +74,7 @@ export default class ProductGrant extends React.Component {
 
         this.state.warnTimer = setTimeout(()=> {
             this.setState({showWarn: false});
-        }, 2000);
+        }, 10000);
     }
 
     grant = (event) => {

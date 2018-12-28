@@ -114,7 +114,7 @@ export default class ProductDetail extends React.Component {
 
         this.state.warnTimer = setTimeout(()=> {
             this.setState({showWarn: false});
-        }, 2000);
+        }, 10000);
     }
 
 
