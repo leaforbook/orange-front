@@ -39,6 +39,7 @@ export default class ProductPrice extends React.Component {
         this.state = {
             priceQueryForm:{
                 productId:props.match.params.productId,
+                all:true,
             },
             priceForm:{
                 productId:props.match.params.productId,

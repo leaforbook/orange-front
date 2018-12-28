@@ -498,27 +498,29 @@ export default class OrderDetail extends React.Component {
                         </FormCell>
                     </Form>
                     <div className="fill_space"></div>
+
+                    <Picker
+                        onChange={selected=>{
+                            let value = ''
+                            let type = ''
+                            selected.forEach( (s,i)=> {
+                                value = this.state.logistics_coms[i]['items'][s].label;
+                                type = this.state.logistics_coms[i]['items'][s].expressId;
+                            })
+                            this.state.logisticsForm.name = value;
+                            this.state.logisticsForm.type = type;
+                            this.setState({
+                                logisticsForm:this.state.logisticsForm,
+                                logistics_show: false
+                            })
+                        }}
+                        groups={this.state.logistics_coms}
+                        show={this.state.logistics_show}
+                        onCancel={e=>this.setState({logistics_show: false})}
+                    />
                 </Popup>
 
-                <Picker
-                    onChange={selected=>{
-                        let value = ''
-                        let type = ''
-                        selected.forEach( (s,i)=> {
-                            value = this.state.logistics_coms[i]['items'][s].label;
-                            type = this.state.logistics_coms[i]['items'][s].expressId;
-                        })
-                        this.state.logisticsForm.name = value;
-                        this.state.logisticsForm.type = type;
-                        this.setState({
-                            logisticsForm:this.state.logisticsForm,
-                            logistics_show: false
-                        })
-                    }}
-                    groups={this.state.logistics_coms}
-                    show={this.state.logistics_show}
-                    onCancel={e=>this.setState({logistics_show: false})}
-                />
+
 
             </div>
         )

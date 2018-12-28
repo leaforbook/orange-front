@@ -81,10 +81,12 @@ export default class ProductGrant extends React.Component {
         console.log(this.state.form)
         Post('/orange/product/share',this.state.form).then(res => {
 
+            this.state.form.userName='';
+
             this.setState({
-                result:res.data
+                result:res.data,
+                form:this.state.form,
             })
-            console.log(res.data)
 
         }).catch(err => {
 
