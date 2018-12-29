@@ -426,7 +426,13 @@ export default class OrderDetail extends React.Component {
                                         </div>
                                     )
                                 }) }
+
+
                             </div>
+                            {
+                                this.state.logistics.value.length === 0 &&
+                                <PreviewItem label={"暂无查询记录"} value={"请等待或检查物流信息是否正确。"} />
+                            }
 
 
                         </PreviewBody>
