@@ -109,12 +109,12 @@ export default class ModifyPassword extends React.Component {
                                     </FormCell>
                                     <FormCell>
                                         <CellBody>
-                                            <Input type="password" placeholder="请输入新密码" defaultValue={this.state.form.newPassword}  onBlur={this.handlerChange.bind(this,"newPassword")}/>
+                                            <Input type="password" placeholder="请输入新密码（6-12位字母数字下划线）" defaultValue={this.state.form.newPassword}  onBlur={this.handlerChange.bind(this,"newPassword")}/>
                                         </CellBody>
                                     </FormCell>
                                     <FormCell>
                                         <CellBody>
-                                            <Input type="password" placeholder="请再次输入新密码" defaultValue={this.state.form.repeatNewPassword}  onBlur={this.handlerChange.bind(this,"repeatNewPassword")}/>
+                                            <Input type="password" placeholder="请再次输入新密码（6-12位字母数字下划线）" defaultValue={this.state.form.repeatNewPassword}  onBlur={this.handlerChange.bind(this,"repeatNewPassword")}/>
                                         </CellBody>
                                     </FormCell>
                                 </Form>

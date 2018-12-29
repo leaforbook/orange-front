@@ -95,17 +95,17 @@ export default class ResetPassword extends React.Component {
                             <Form>
                                 <FormCell>
                                     <CellBody>
-                                        <Input type="tel" placeholder="请输入用户名" defaultValue={this.state.form.userName}  onBlur={this.handlerChange.bind(this,"userName")}/>
+                                        <Input type="tel" placeholder="请输入用户名（5-10位字母数字下划线）" defaultValue={this.state.form.userName}  onBlur={this.handlerChange.bind(this,"userName")}/>
                                     </CellBody>
                                 </FormCell>
                                 <FormCell>
                                     <CellBody>
-                                        <Input type="password" placeholder="请输入新密码" defaultValue={this.state.form.password}  onBlur={this.handlerChange.bind(this,"password")}/>
+                                        <Input type="password" placeholder="请输入新密码（6-12位字母数字下划线）" defaultValue={this.state.form.password}  onBlur={this.handlerChange.bind(this,"password")}/>
                                     </CellBody>
                                 </FormCell>
                                 <FormCell>
                                     <CellBody>
-                                        <Input type="password" placeholder="请再次输入新密码" defaultValue={this.state.form.repeatPassword}  onBlur={this.handlerChange.bind(this,"repeatPassword")}/>
+                                        <Input type="password" placeholder="请再次输入新密码（6-12位字母数字下划线）" defaultValue={this.state.form.repeatPassword}  onBlur={this.handlerChange.bind(this,"repeatPassword")}/>
                                     </CellBody>
                                 </FormCell>
                                 <FormCell>

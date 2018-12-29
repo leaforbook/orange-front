@@ -119,26 +119,41 @@ export default class AddressEdit extends React.Component {
     }
 
     createAddress = (event) => {
+        this.setState({showLoading: true});
         if(this.state.queryForm.addressId==='') {
             var url = '/orange/address/create';
             var data = this.state.form;
 
             Post(url,data).then(res => {
+                this.setState({showLoading: false});
                 this.props.history.push('/address/detail/'+res.data);
             }).catch(err => {
-
+                this.setState({showLoading: false});
+                this.showWarn(err);
             });
         }else {
             var url = '/orange/address/update';
             var data = this.state.form;
 
             Post(url,data).then(res => {
+                this.setState({showLoading: false});
                 this.props.history.push('/address/detail/'+this.state.queryForm.addressId);
             }).catch(err => {
-
+                this.setState({showLoading: false});
+                this.showWarn(err);
             });
         }
 
+    }
+
+
+    showWarn(msg) {
+        this.setState({showWarn: true});
+        this.setState({warnMsg: msg});
+
+        this.state.warnTimer = setTimeout(()=> {
+            this.setState({showWarn: false});
+        }, 10000);
     }
 
     render() {

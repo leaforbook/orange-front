@@ -26,12 +26,15 @@ import {
     MediaBoxTitle,
     MediaBoxDescription,
     SearchBar,
+    Picker,
 } from 'react-weui';
 import 'weui';
 import 'react-weui/build/packages/react-weui.css';
 import Page from "../page";
 import Post from '../../public/http_util';
 import "../../item.css";
+import {NavBarItem} from "../logistics";
+
 
 export default class OrderEditor extends React.Component {
 
@@ -73,6 +76,42 @@ export default class OrderEditor extends React.Component {
                 pageSize:50,
                 pageNum:1
             },
+            addressEditForm : {
+                name: '',
+                sex: '',
+                provinceId:'',
+                provinceName:'',
+                address:'',
+                telephone:'',
+                mailcode:'',
+                bak:''
+            },
+            showLoading: false,
+            showWarn: false,
+            warnMsg: '',
+            provinces:[
+                {
+                    items:[
+
+                    ]
+                }
+            ],
+            province_show:false,
+            province_value:'',
+            sexes:[
+                {
+                    items:[
+                        {
+                            label:"先生"
+                        },
+                        {
+                            label:"女士"
+                        }
+                    ]
+                }
+            ],
+            sex_show:false,
+            sex_value:'',
         }
     }
 
@@ -94,6 +133,59 @@ export default class OrderEditor extends React.Component {
         }).catch(err => {
 
         });
+
+
+        var provinces = sessionStorage.getItem("leaforbook-province");
+        if(provinces!=null&&provinces!=undefined) {
+            this.state.provinces[0].items = JSON.parse(provinces);
+            this.setState({
+                provinces: this.state.provinces,
+            })
+        } else {
+            var url = '/common/province/query';
+
+            Post(url).then(res => {
+                sessionStorage.setItem("leaforbook-province",JSON.stringify(res.data))
+                this.state.provinces[0].items = res.data;
+                this.setState({
+                    provinces: this.state.provinces,
+                })
+            }).catch(err => {
+
+            });
+        }
+    }
+
+
+    handlerAddressChange = (p,event) => {
+        this.state.addressEditForm[p] = event.target.value;
+        this.setState({
+            addressEditForm:this.state.addressEditForm,
+        })
+    }
+
+    createAddress = (event) => {
+        this.setState({showLoading: true});
+
+        var url = '/orange/address/create';
+        var data = this.state.addressEditForm;
+
+        Post(url,data).then(res => {
+            this.setState({showLoading: false});
+            this.toAddressList();
+        }).catch(err => {
+            this.setState({showLoading: false});
+            this.showWarn(err);
+        });
+    }
+
+    showWarn(msg) {
+        this.setState({showWarn: true});
+        this.setState({warnMsg: msg});
+
+        this.state.warnTimer = setTimeout(()=> {
+            this.setState({showWarn: false});
+        }, 10000);
     }
 
     onClickIncrementButton = (event) =>  {
@@ -192,6 +284,16 @@ export default class OrderEditor extends React.Component {
         })
     }
 
+    toAddressEditor = (event) => {
+        this.state.hiddenPanel.addressList=true;
+        this.state.hiddenPanel.main=true;
+        this.state.hiddenPanel.addressEditor=false;
+
+        this.setState({
+            hiddenPanel:this.state.hiddenPanel,
+        })
+    }
+
 
     toMain = (event) => {
         this.state.hiddenPanel.addressList=true;
@@ -205,6 +307,19 @@ export default class OrderEditor extends React.Component {
     selectAddress = (i,event) => {
         this.state.receiver = this.state.addressList[i].name+"  "+this.state.addressList[i].sex+"  "+this.state.addressList[i].telephone;
         this.state.form.addressId = this.state.addressList[i].addressId;
+        this.setState({
+            receiver:this.state.receiver,
+            form:this.state.form,
+        })
+    }
+
+    clearAddress = (event) => {
+        this.state.receiver = '';
+        this.state.form.addressId = '';
+        this.setState({
+            receiver:this.state.receiver,
+            form:this.state.form,
+        })
     }
 
     searchAddress = (queryParams,event) =>  {
@@ -406,6 +521,12 @@ export default class OrderEditor extends React.Component {
                                 <Cells>
                                     <Panel  >
                                         <Form radio>
+                                            <FormCell radio>
+                                                <CellBody>{"清空收货人"}</CellBody>
+                                                <CellFooter>
+                                                    <Radio name={"radio3"} value={""} onClick={event => {this.clearAddress()}}/>
+                                                </CellFooter>
+                                            </FormCell>
                                     {this.state.addressList.map((address,i) => {
                                         return (
                                             <FormCell radio>
@@ -424,15 +545,139 @@ export default class OrderEditor extends React.Component {
 
                         </Page>
 
+                        <div className="fill_space"></div>
+                        <div className="fill_space"></div>
+                        <div className="fill_space"></div>
+
                         <div className="fixd_in_bottom">
                             <ButtonArea   direction="horizontal">
-                                <Button  onClick={(event) => { this.toMain(); }}>确定</Button>
+                                <Button type="default" onClick={(event) => { this.toAddressEditor(); }}>新增地址</Button>
+                                <Button onClick={(event) => { this.toMain(); }}>确定</Button>
                             </ButtonArea>
                         </div>
 
                 </div>
 
                 <div hidden={this.state.hiddenPanel.addressEditor}>
+
+                    <Page className="input" title="" subTitle="">
+                        <Flex>
+                            <FlexItem>
+                                <div className="placeholder">
+                                    <CellsTitle>新增收货地址</CellsTitle>
+                                </div>
+                            </FlexItem>
+                        </Flex>
+                        <Flex>
+                            <FlexItem>
+                                <div className="placeholder">
+                                    <Form>
+                                        <FormCell>
+                                            <CellBody>
+                                                <Input type="tel" defaultValue={this.state.addressEditForm.name} placeholder="收货人姓名" onBlur={this.handlerAddressChange.bind(this,"name")}/>
+                                            </CellBody>
+                                        </FormCell>
+                                        <FormCell>
+                                            <CellBody>
+                                                <Input type="tel" defaultValue={this.state.addressEditForm.telephone}  placeholder="手机号码" onBlur={this.handlerAddressChange.bind(this,"telephone")}/>
+                                            </CellBody>
+                                        </FormCell>
+                                        <FormCell>
+                                            <CellBody>
+                                                <Input type="text"
+                                                       value={this.state.addressEditForm.sex}
+                                                       onClick={ e=> {
+                                                           //e.preventDefault();
+                                                           this.setState({sex_show: true})
+                                                       }}
+                                                       placeholder="选择性别"
+                                                       readOnly={true}
+                                                />
+                                            </CellBody>
+                                        </FormCell>
+                                        <FormCell>
+                                            <CellBody>
+                                                <Input type="text"
+                                                       value={this.state.addressEditForm.provinceName}
+                                                       onClick={ e=> {
+                                                           //e.preventDefault();
+                                                           this.setState({province_show: true})
+                                                       }}
+                                                       placeholder="选择省份"
+                                                       readOnly={true}
+                                                />
+                                            </CellBody>
+                                        </FormCell>
+                                        <FormCell>
+                                            <CellBody>
+                                                <Input type="tel" defaultValue={this.state.addressEditForm.mailcode}  placeholder="邮政编码" onBlur={this.handlerAddressChange.bind(this,"mailcode")}/>
+                                            </CellBody>
+                                        </FormCell>
+                                        <FormCell>
+                                            <CellBody>
+                                                <TextArea placeholder="详细地址" rows="2" maxLength={100}  value={this.state.addressEditForm.address} onChange={this.handlerAddressChange.bind(this,"address")}></TextArea>
+                                            </CellBody>
+                                        </FormCell>
+                                        <FormCell>
+                                            <CellBody>
+                                                <TextArea placeholder="备注" rows="2" maxLength={200}  value={this.state.addressEditForm.bak} onChange={this.handlerAddressChange.bind(this,"bak")}></TextArea>
+                                            </CellBody>
+                                        </FormCell>
+                                    </Form>
+                                    <ButtonArea>
+                                        <Button
+                                            //button to display toptips
+                                            onClick={(event) => { this.createAddress(); }}>
+                                            保存
+                                        </Button>
+                                    </ButtonArea>
+
+                                    <Toast icon="loading" show={this.state.showLoading}>保存中...</Toast>
+                                    <Toptips type="warn" show={this.state.showWarn}> {this.state.warnMsg} </Toptips>
+                                </div>
+                            </FlexItem>
+                        </Flex>
+
+
+                    </Page>
+
+
+                    <Picker
+                        onChange={selected=>{
+                            let value = ''
+                            let id = ''
+                            selected.forEach( (s,i)=> {
+                                value = this.state.provinces[i]['items'][s].label;
+                                id = this.state.provinces[i]['items'][s].provinceId;
+                            })
+                            this.state.addressEditForm.provinceName = value;
+                            this.state.addressEditForm.provinceId = id;
+                            this.setState({
+                                addressEditForm:this.state.addressEditForm,
+                                province_show: false
+                            })
+                        }}
+                        groups={this.state.provinces}
+                        show={this.state.province_show}
+                        onCancel={e=>this.setState({province_show: false})}
+                    />
+
+                    <Picker
+                        onChange={selected=>{
+                            let value = ''
+                            selected.forEach( (s,i)=> {
+                                value = this.state.sexes[i]['items'][s].label
+                            })
+                            this.state.addressEditForm.sex = value;
+                            this.setState({
+                                addressEditForm:this.state.addressEditForm,
+                                sex_show: false
+                            })
+                        }}
+                        groups={this.state.sexes}
+                        show={this.state.sex_show}
+                        onCancel={e=>this.setState({sex_show: false})}
+                    />
 
                 </div>
 
