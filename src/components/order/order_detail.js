@@ -162,7 +162,10 @@ export default class OrderDetail extends React.Component {
             logistics_show:false,
             expressForm:{
                 inCommonUse:'1',
-            }
+            },
+            singleExpressForm:{
+                expressId:'',
+            },
         }
     }
 
@@ -231,6 +234,22 @@ export default class OrderDetail extends React.Component {
                         this.setState({
                             logistics:this.state.logistics,
                         })
+
+                        this.state.singleExpressForm.expressId = res.data.com;
+                        this.setState({
+                            singleExpressForm:this.state.singleExpressForm,
+                        })
+
+                        var url = '/common/express/get';
+
+                        Post(url,this.state.singleExpressForm).then(res => {
+                            this.state.logistics.com = res.data[0].name;
+                            this.setState({
+                                logistics:this.state.logistics,
+                            })
+                        }).catch(err => {
+
+                        });
                     }
 
                 }).catch(err => {
@@ -390,7 +409,7 @@ export default class OrderDetail extends React.Component {
 
                     <br/>
 
-                    <Preview hidden={!this.state.logistics.isShow}>
+                    <Preview  hidden={!this.state.address.isShow}>
                         <PreviewHeader>
                             <PreviewItem label="物流信息" value="" />
                         </PreviewHeader>
@@ -398,14 +417,17 @@ export default class OrderDetail extends React.Component {
                             <PreviewItem label="物流公司" value={this.state.logistics.com+""} />
                             <PreviewItem label="物流单号" value={this.state.logistics.nu+""} />
                             <br/>
-                            {this.state.logistics.value.map( (item,i) => {
-                                return (
-                                    <div  key={i}>
-                                    <PreviewItem label={i+1} value={item.ftime +"    "+ item.context} />
+                            <div  hidden={!this.state.logistics.isShow}>
+                                {this.state.logistics.value.map( (item,i) => {
+                                    return (
+                                        <div  key={i}>
+                                            <PreviewItem label={i+1} value={item.ftime +"    "+ item.context} />
 
-                                    </div>
-                                )
-                            }) }
+                                        </div>
+                                    )
+                                }) }
+                            </div>
+
 
                         </PreviewBody>
                     </Preview>
