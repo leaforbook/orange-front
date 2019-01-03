@@ -20,6 +20,7 @@ import DingDan from '../../images/dingdan.png';
 import FaHuo from '../../images/fahuo.png';
 import GeRenFill from '../../images/geren_fill.png';
 import AiXin from '../../images/aixin.png';
+import Tutorial from '../../images/tutorial.png';
 
 
 export default class Home extends React.Component {
@@ -112,6 +113,21 @@ export default class Home extends React.Component {
                                 </CellHeader>
                                 <CellBody>
                                     个人
+                                </CellBody>
+                                <CellFooter>
+
+                                </CellFooter>
+                            </Cell>
+                        </Cells>
+
+                        <CellsTitle></CellsTitle>
+                        <Cells>
+                            <Cell access  onClick={(event) => { this.turnTO('/tutorial'); }}>
+                                <CellHeader>
+                                    <img src={Tutorial} alt="" style={{display: `block`, width: `20px`, marginRight: `5px`}}/>
+                                </CellHeader>
+                                <CellBody>
+                                    教程
                                 </CellBody>
                                 <CellFooter>
 
