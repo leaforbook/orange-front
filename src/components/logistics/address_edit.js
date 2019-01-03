@@ -173,7 +173,7 @@ export default class AddressEdit extends React.Component {
                                 <Form>
                                     <FormCell>
                                         <CellBody>
-                                            <Input type="tel" defaultValue={this.state.form.name} placeholder="收货人姓名" onBlur={this.handlerChange.bind(this,"name")}/>
+                                            <Input type="text" defaultValue={this.state.form.name} placeholder="收货人姓名" onBlur={this.handlerChange.bind(this,"name")}/>
                                         </CellBody>
                                     </FormCell>
                                     <FormCell>

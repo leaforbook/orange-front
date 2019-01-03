@@ -95,7 +95,7 @@ export default class ResetPassword extends React.Component {
                             <Form>
                                 <FormCell>
                                     <CellBody>
-                                        <Input type="tel" placeholder="请输入用户名（5-10位字母数字下划线）" defaultValue={this.state.form.userName}  onBlur={this.handlerChange.bind(this,"userName")}/>
+                                        <Input type="text" placeholder="请输入用户名（5-10位字母数字下划线）" defaultValue={this.state.form.userName}  onBlur={this.handlerChange.bind(this,"userName")}/>
                                     </CellBody>
                                 </FormCell>
                                 <FormCell>
@@ -110,7 +110,7 @@ export default class ResetPassword extends React.Component {
                                 </FormCell>
                                 <FormCell>
                                     <CellBody>
-                                        <Input type="tel" placeholder="请输入重置码" defaultValue={this.state.form.proof}  onBlur={this.handlerChange.bind(this,"proof")}/>
+                                        <Input type="number" placeholder="请输入重置码" defaultValue={this.state.form.proof}  onBlur={this.handlerChange.bind(this,"proof")}/>
                                     </CellBody>
                                 </FormCell>
                             </Form>

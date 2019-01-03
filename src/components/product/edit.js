@@ -325,7 +325,7 @@ export default class ProductEditor extends React.Component {
                                     <Form>
                                         <FormCell>
                                             <CellBody>
-                                                <Input defaultValue={this.state.form.productName} type="tel" placeholder="产品名称" onBlur={this.handlerChange.bind(this,"productName")}/>
+                                                <Input defaultValue={this.state.form.productName} type="text" placeholder="产品名称" onBlur={this.handlerChange.bind(this,"productName")}/>
                                             </CellBody>
                                         </FormCell>
                                         <FormCell>
@@ -373,7 +373,7 @@ export default class ProductEditor extends React.Component {
                                                                             <Label>属性类型:</Label>
                                                                         </CellHeader>
                                                                         <CellBody>
-                                                                            <Input type="tel" defaultValue={this.state.priceAttribute[i].type} placeholder="@" onBlur={this.handlerPriceTypeChange.bind(this,i)}/>
+                                                                            <Input type="text" defaultValue={this.state.priceAttribute[i].type} placeholder="@" onBlur={this.handlerPriceTypeChange.bind(this,i)}/>
                                                                         </CellBody>
                                                                         <CellFooter>
                                                                             <Button type="vcode" onClick={(event) => { this.removeType(i); }}>删除</Button>
@@ -388,7 +388,7 @@ export default class ProductEditor extends React.Component {
                                                                                         <Label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;属性值:</Label>
                                                                                     </CellHeader>
                                                                                     <CellBody>
-                                                                                        <Input type="tel" defaultValue={this.state.priceAttribute[i].value[j]} placeholder="#" onBlur={this.handlerPriceValueChange.bind(this,i,j)}/>
+                                                                                        <Input type="text" defaultValue={this.state.priceAttribute[i].value[j]} placeholder="#" onBlur={this.handlerPriceValueChange.bind(this,i,j)}/>
                                                                                     </CellBody>
                                                                                     <CellFooter>
                                                                                         <Button disabled={this.state.priceAttribute[i].value.length===1} type="warn" size="small" onClick={(event) => { this.removeValue(i,j); }}>删除</Button>
@@ -455,7 +455,7 @@ export default class ProductEditor extends React.Component {
                                                                             <Label>属性类型:</Label>
                                                                         </CellHeader>
                                                                         <CellBody>
-                                                                            <Input type="tel" defaultValue={this.state.freightAttribute[i].type} placeholder="@" onBlur={this.handlerFreightTypeChange.bind(this,i)}/>
+                                                                            <Input type="text" defaultValue={this.state.freightAttribute[i].type} placeholder="@" onBlur={this.handlerFreightTypeChange.bind(this,i)}/>
                                                                         </CellBody>
                                                                         <CellFooter>
                                                                             <Button type="vcode" onClick={(event) => { this.removeFreightType(i); }}>删除</Button>
@@ -470,7 +470,7 @@ export default class ProductEditor extends React.Component {
                                                                                         <Label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;属性值:</Label>
                                                                                     </CellHeader>
                                                                                     <CellBody>
-                                                                                        <Input type="tel" defaultValue={this.state.freightAttribute[i].value[j]} placeholder="#" onBlur={this.handlerFreightValueChange.bind(this,i,j)}/>
+                                                                                        <Input type="text" defaultValue={this.state.freightAttribute[i].value[j]} placeholder="#" onBlur={this.handlerFreightValueChange.bind(this,i,j)}/>
                                                                                     </CellBody>
                                                                                     <CellFooter>
                                                                                         <Button disabled={this.state.freightAttribute[i].value.length===1} type="warn" size="small" onClick={(event) => { this.removeFreightValue(i,j); }}>删除</Button>

@@ -94,7 +94,7 @@ export default class Login extends React.Component {
                             <Form>
                                 <FormCell>
                                     <CellBody>
-                                        <Input type="tel" defaultValue={this.state.form.userName} placeholder="请输入用户名" onBlur={this.handlerChange.bind(this,"userName")}/>
+                                        <Input type="text" defaultValue={this.state.form.userName} placeholder="请输入用户名" onBlur={this.handlerChange.bind(this,"userName")}/>
                                     </CellBody>
                                 </FormCell>
                                 <FormCell>

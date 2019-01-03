@@ -119,7 +119,7 @@ export default class ModifyUserInfo extends React.Component {
                                 <Form>
                                     <FormCell>
                                         <CellBody>
-                                            <Input type="tel" placeholder="请输入真实姓名（中文）" defaultValue={this.state.form.realName}  onBlur={this.handlerChange.bind(this,"realName")}/>
+                                            <Input type="text" placeholder="请输入真实姓名（中文）" defaultValue={this.state.form.realName}  onBlur={this.handlerChange.bind(this,"realName")}/>
                                         </CellBody>
                                     </FormCell>
                                     <FormCell>
@@ -129,7 +129,7 @@ export default class ModifyUserInfo extends React.Component {
                                     </FormCell>
                                     <FormCell>
                                         <CellBody>
-                                            <Input type="tel" placeholder="请输入用户名（5-10位字母数字下划线）" defaultValue={this.state.form.userName} onBlur={this.handlerChange.bind(this,"userName")}/>
+                                            <Input type="text" placeholder="请输入用户名（5-10位字母数字下划线）" defaultValue={this.state.form.userName} onBlur={this.handlerChange.bind(this,"userName")}/>
                                         </CellBody>
                                     </FormCell>
                                 </Form>

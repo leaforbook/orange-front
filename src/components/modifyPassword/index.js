@@ -99,7 +99,7 @@ export default class ModifyPassword extends React.Component {
                                 <Form>
                                     <FormCell>
                                         <CellBody>
-                                            <Input type="tel" placeholder="请输入用户名" defaultValue={this.state.form.userName} readOnly/>
+                                            <Input type="text" placeholder="请输入用户名" defaultValue={this.state.form.userName} readOnly/>
                                         </CellBody>
                                     </FormCell>
                                     <FormCell>
