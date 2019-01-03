@@ -26,6 +26,7 @@ import 'react-weui/build/packages/react-weui.css';
 import Page from "../page";
 import Post from '../../public/http_util';
 import "../../item.css";
+import {NavBarItem} from "./index";
 
 export default class AddressEdit extends React.Component {
 
@@ -223,19 +224,27 @@ export default class AddressEdit extends React.Component {
                                         </CellBody>
                                     </FormCell>
                                 </Form>
-                                <ButtonArea>
-                                    <Button
-                                        //button to display toptips
-                                        onClick={(event) => { this.createAddress(); }}>
-                                        保存
-                                    </Button>
-                                </ButtonArea>
+
 
                                 <Toast icon="loading" show={this.state.showLoading}>保存中...</Toast>
                                 <Toptips type="warn" show={this.state.showWarn}> {this.state.warnMsg} </Toptips>
                             </div>
                         </FlexItem>
                     </Flex>
+
+                    <div className="fill_space"></div>
+                    <div className="fill_space"></div>
+                    <div className="fill_space"></div>
+
+                    <div className="fixd_in_bottom">
+                        <ButtonArea>
+                            <Button
+                                //button to display toptips
+                                onClick={(event) => { this.createAddress(); }}>
+                                保存
+                            </Button>
+                        </ButtonArea>
+                    </div>
 
 
                 </Page>

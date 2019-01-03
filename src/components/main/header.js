@@ -15,7 +15,7 @@ export default class Header extends React.Component {
     }
 
     turnTO = (path,event) => {
-        console.log("1")
+        sessionStorage.setItem("leaforbook-tableIndex",0);
         window.location.href="/home"
     }
 
@@ -25,7 +25,7 @@ export default class Header extends React.Component {
                 <Tab type="navbar" onChange={(event) => { this.turnTO('/'); }}>
                     <NavBarItem label="Home"></NavBarItem>
                 </Tab>
-                <div className="fill_space"> </div>
+
             </div>
         )
     }
