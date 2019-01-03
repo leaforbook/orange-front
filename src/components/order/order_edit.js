@@ -27,13 +27,14 @@ import {
     MediaBoxDescription,
     SearchBar,
     Picker,
+    Dialog,
+    NavBarItem,
 } from 'react-weui';
 import 'weui';
 import 'react-weui/build/packages/react-weui.css';
 import Page from "../page";
 import Post from '../../public/http_util';
 import "../../item.css";
-import {NavBarItem} from "../logistics";
 
 
 export default class OrderEditor extends React.Component {
@@ -112,7 +113,29 @@ export default class OrderEditor extends React.Component {
             ],
             sex_show:false,
             sex_value:'',
+            styleDialog: {
+                title: '注意',
+                buttons: [
+                    {
+                        type: 'default',
+                        label: '继续',
+                        onClick: this.confirmSubmitOrder.bind(this)
+                    },
+                    {
+                        type: 'primary',
+                        label: '返回',
+                        onClick: this.hideDialog.bind(this)
+                    }
+                ]
+            },
+            showDialog: false,
         }
+    }
+
+    hideDialog() {
+        this.setState({
+            showDialog: false
+        });
     }
 
     componentWillMount() {
@@ -344,6 +367,17 @@ export default class OrderEditor extends React.Component {
     }
 
     submitOrder = (event) => {
+
+        if(this.state.form.addressId==='') {
+            this.setState({ showDialog: true});
+        }else {
+            this.confirmSubmitOrder();
+        }
+
+
+    }
+
+    confirmSubmitOrder() {
         Post('/orange/order/create',this.state.form).then(res => {
 
             this.props.history.push('/order/detail/'+res.data);
@@ -500,9 +534,16 @@ export default class OrderEditor extends React.Component {
 
                     <div className="fixd_in_bottom">
                         <ButtonArea   direction="horizontal">
-                            <Button disabled={this.state.form.priceId===''||this.state.form.freightId===''}  onClick={(event) => { this.submitOrder(); }}>提交订单</Button>
+                            <Button disabled={
+                                (this.state.form.addressId !='' && this.state.form.deliveryDate ==='') ||
+                                this.state.form.priceId===''||this.state.form.freightId===''
+                            }  onClick={(event) => { this.submitOrder(); }}>提交订单</Button>
                         </ButtonArea>
                     </div>
+
+                    <Dialog type="ios" title={this.state.styleDialog.title} buttons={this.state.styleDialog.buttons} show={this.state.showDialog}>
+                        您没有选择收货人，如果无需发货请继续，如果需要发货请添加收货人
+                    </Dialog>
                 </div>
 
                 <div hidden={this.state.hiddenPanel.addressList}>
@@ -574,7 +615,7 @@ export default class OrderEditor extends React.Component {
                                     <Form>
                                         <FormCell>
                                             <CellBody>
-                                                <Input type="tel" defaultValue={this.state.addressEditForm.name} placeholder="收货人姓名" onBlur={this.handlerAddressChange.bind(this,"name")}/>
+                                                <Input type="text" defaultValue={this.state.addressEditForm.name} placeholder="收货人姓名" onBlur={this.handlerAddressChange.bind(this,"name")}/>
                                             </CellBody>
                                         </FormCell>
                                         <FormCell>
@@ -624,7 +665,12 @@ export default class OrderEditor extends React.Component {
                                             </CellBody>
                                         </FormCell>
                                     </Form>
-                                    <ButtonArea>
+                                    <ButtonArea   direction="horizontal">
+                                        <Button type="default"
+                                            //button to display toptips
+                                            onClick={(event) => { this.toAddressList(); }}>
+                                            返回
+                                        </Button>
                                         <Button
                                             //button to display toptips
                                             onClick={(event) => { this.createAddress(); }}>

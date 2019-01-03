@@ -158,7 +158,7 @@ export default class ProductPrice extends React.Component {
                                                                         <Label>售价</Label>
                                                                     </CellHeader>
                                                                     <CellBody>
-                                                                        <Input defaultValue={this.state.priceForm.list[i].outMinPrice} type="money" min="1" step="any" placeholder="0.00" onChange={this.handlerOutPriceChange.bind(this,i,"outMinPrice")}/>
+                                                                        <Input defaultValue={this.state.priceForm.list[i].outMinPrice} type="number" min="1" step="any" placeholder="0.00" onChange={this.handlerOutPriceChange.bind(this,i,"outMinPrice")}/>
                                                                     </CellBody>
                                                                 </FormCell>
                                                             }

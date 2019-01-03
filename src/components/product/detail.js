@@ -125,7 +125,7 @@ export default class ProductDetail extends React.Component {
                 <Page className="article" title="" subTitle="">
                     <Article>
                         <h1>{this.state.result.productName}</h1>
-                        <section>
+                        <section style={{whiteSpace: "pre-line"}}>
                             {this.state.result.productDesc}
                         </section>
                     </Article>

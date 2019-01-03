@@ -136,7 +136,7 @@ export default class ProductFreight extends React.Component {
                                                                     <Label>运费</Label>
                                                                 </CellHeader>
                                                                 <CellBody>
-                                                                    <Input defaultValue={this.state.freightForm.list[i].freightPrice} type="money" min="1" step="any" placeholder="0.00" onChange={this.handlerFreightChange.bind(this,i,"freightPrice")}/>
+                                                                    <Input defaultValue={this.state.freightForm.list[i].freightPrice} type="number" min="1" step="any" placeholder="0.00" onChange={this.handlerFreightChange.bind(this,i,"freightPrice")}/>
                                                                 </CellBody>
                                                             </FormCell>
                                                         }
