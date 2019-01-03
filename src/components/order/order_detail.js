@@ -445,21 +445,21 @@ export default class OrderDetail extends React.Component {
                     <div className="fixd_in_bottom">
 
                         <ButtonArea   direction="horizontal">
-                            <Button plain type="default"  onClick={(event)=>this.setState({bottom_show: true})}>删除</Button>
+                            <Button type="default"  onClick={(event)=>this.setState({bottom_show: true})}>删除</Button>
 
                             {
                                 this.state.order.orderStatus==='2' &&
-                                <Button plain type="default"  onClick={(event)=>this.setState({bottom_show1: true})}>发货</Button>
+                                <Button type="default"  onClick={(event)=>this.setState({bottom_show1: true})}>发货</Button>
                             }
 
                             {
                                 this.state.order.orderStatus==='3' &&
-                                <Button plain type="default"  onClick={(event)=>this.setState({bottom_show1: true})}>发货</Button>
+                                <Button type="default"  onClick={(event)=>this.setState({bottom_show1: true})}>发货</Button>
                             }
 
                             {
                                 this.state.order.orderStatus!='1' &&
-                                <Button plain  onClick={(event) => { this.setState({
+                                <Button  onClick={(event) => { this.setState({
                                     order_status_show:true,
                                 }) }}>修改状态</Button>
                             }

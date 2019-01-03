@@ -114,8 +114,8 @@ export default class AddressDetail extends React.Component {
 
                 <div className="fixd_in_bottom">
                     <ButtonArea   direction="horizontal">
-                        <Button plain  onClick={(event)=>this.setState({bottom_show: true})}>删除</Button>
-                        <Button plain  onClick={(event) => { this.turnTO('/address/edit/'+this.state.form.addressId); }}>修改</Button>
+                        <Button type={"default"}  onClick={(event)=>this.setState({bottom_show: true})}>删除</Button>
+                        <Button  onClick={(event) => { this.turnTO('/address/edit/'+this.state.form.addressId); }}>修改</Button>
                     </ButtonArea>
                 </div>
 

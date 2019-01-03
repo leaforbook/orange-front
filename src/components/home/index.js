@@ -122,7 +122,7 @@ export default class Home extends React.Component {
 
                         <CellsTitle></CellsTitle>
                         <Cells>
-                            <Cell access  onClick={(event) => { this.turnTO('/tutorial'); }}>
+                            <Cell access  onClick={(event) => { this.turnTO('/tutorial/list'); }}>
                                 <CellHeader>
                                     <img src={Tutorial} alt="" style={{display: `block`, width: `20px`, marginRight: `5px`}}/>
                                 </CellHeader>

@@ -223,6 +223,12 @@ export default class OrderList extends React.Component {
                 <div className="fill_space"></div>
                 <div className="fill_space"></div>
                 <div className="fill_space"></div>
+
+                <div className="fixd_in_bottom">
+                    <ButtonArea   direction="horizontal">
+                        <Button  onClick={(event) => { this.turnTO('/product/list'); }}>去下单</Button>
+                    </ButtonArea>
+                </div>
                 
             </div>
         )

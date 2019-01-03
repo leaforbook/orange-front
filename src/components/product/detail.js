@@ -131,24 +131,28 @@ export default class ProductDetail extends React.Component {
                     </Article>
                 </Page>
 
+                <div className="fill_space"></div>
+                <div className="fill_space"></div>
+                <div className="fill_space"></div>
+
                 <div className="fixd_in_bottom">
                     <ButtonArea   direction="horizontal">
                         {
                             this.state.isCreater &&
-                            <Button plain  onClick={(event)=>this.setState({bottom_show: true})}>删除</Button>
+                            <Button type={"default"}  onClick={(event)=>this.setState({bottom_show: true})}>删除</Button>
                         }
 
                         {
                             this.state.isCreater &&
-                            <Button plain  onClick={(event) => { this.turnTO('/product/edit/'+this.state.form.productId); }}>修改</Button>
+                            <Button type={"default"}  onClick={(event) => { this.turnTO('/product/edit/'+this.state.form.productId); }}>修改</Button>
                         }
 
                         {
                             this.state.isCreater &&
-                            <Button plain  onClick={(event) => { this.turnTO('/product/grant/'+this.state.form.productId+'/'+this.state.result.productName); }}>授权</Button>
+                            <Button type={"default"}  onClick={(event) => { this.turnTO('/product/grant/'+this.state.form.productId+'/'+this.state.result.productName); }}>授权</Button>
                         }
 
-                        <Button plain  onClick={(event) => { this.turnTO('/order/edit/'+this.state.form.productId); }}>下单</Button>
+                        <Button  onClick={(event) => { this.turnTO('/order/edit/'+this.state.form.productId); }}>下单</Button>
                     </ButtonArea>
                 </div>
 
