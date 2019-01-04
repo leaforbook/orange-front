@@ -89,6 +89,11 @@ export default class Logistics extends React.Component {
     }
 
     componentWillMount() {
+
+        this.state.addressQueryForm.pageNum = 1;
+        this.setState({
+            addressQueryForm:this.state.addressQueryForm,
+        })
         Post('/orange/address/query',this.state.addressQueryForm).then(res => {
 
             this.state.addressList = res.data;
@@ -121,6 +126,10 @@ export default class Logistics extends React.Component {
             });
         }
 
+        this.state.orderQueryForm.pageNum = 1;
+        this.setState({
+            orderQueryForm:this.state.orderQueryForm,
+        })
         Post('/orange/order/query',this.state.orderQueryForm).then(res => {
 
             this.state.orderList = res.data;
@@ -132,6 +141,19 @@ export default class Logistics extends React.Component {
         }).catch(err => {
 
         })
+
+        this.state.logisticsForm.addressIdList=[];
+        this.state.logisticsForm.orderIdList=[];
+        this.state.logisticsForm.name='';
+        this.state.logisticsForm.postid='';
+        this.state.logisticsForm.type='';
+        this.state.canDeliver = true;
+
+        this.setState({
+            logisticsForm:this.state.logisticsForm,
+            canDeliver:this.state.canDeliver,
+        })
+
     }
 
     searchOrder = (event) =>  {
