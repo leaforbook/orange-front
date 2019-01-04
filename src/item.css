@@ -43,3 +43,8 @@
 .center_panel {
     text-align: center;
 }
+
+.tips_stype {
+    font-size: 10px;
+    color: rgba(2, 175, 36, 0.98);
+}

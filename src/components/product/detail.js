@@ -40,6 +40,7 @@ export default class ProductDetail extends React.Component {
 
             },
             bottom_show:false,
+            bottom_show1:false,
             showWarn: false,
             passwordForm:{
                 password:''
@@ -58,8 +59,7 @@ export default class ProductDetail extends React.Component {
         })
     }
 
-
-    componentDidMount() {
+    componentWillMount() {
         if(this.state.form.productId!='') {
             var url = '/orange/product/isCreater';
             var data = this.state.form;
@@ -92,6 +92,34 @@ export default class ProductDetail extends React.Component {
         });
 
         this.setState({bottom_show: false});
+    }
+
+    verifyPassword1 = (event) => {
+        var url = '/common/user/verifyPassword';
+        var data = this.state.passwordForm;
+
+        Post(url,data).then(res => {
+
+            this.setState({bottom_show1: false});
+
+            Post("/orange/product/copy",this.state.form).then(res => {
+
+                this.state.form.productId = res.data;
+                this.setState({
+                    form:this.state.form
+                })
+                this.componentWillMount();
+
+            }).catch(err => {
+                this.showWarn(err);
+            });
+
+        }).catch(err => {
+            this.showWarn(err);
+            this.setState({bottom_show1: false});
+        });
+
+
     }
 
     turnTO = (path,event) => {
@@ -138,6 +166,10 @@ export default class ProductDetail extends React.Component {
                 <div className="fixd_in_bottom">
                     <ButtonArea   direction="horizontal">
                         {
+                            !this.state.isCreater &&
+                            <Button type={"default"}  onClick={(event)=>this.setState({bottom_show1: true})}>复制</Button>
+                        }
+                        {
                             this.state.isCreater &&
                             <Button type={"default"}  onClick={(event)=>this.setState({bottom_show: true})}>删除</Button>
                         }
@@ -171,6 +203,29 @@ export default class ProductDetail extends React.Component {
                     <Form>
                         <FormCell>
                             <CellBody>
+                                <Input type="password" defaultValue={this.state.passwordForm.password}  placeholder="请输入密码" onBlur={this.handlerChangePassword.bind(this,"password")}/>
+                            </CellBody>
+                        </FormCell>
+                    </Form>
+                    <div className="fill_space"></div>
+                </Popup>
+
+                <Popup
+                    show={this.state.bottom_show1}
+                    onRequestClose={(event)=>this.setState({bottom_show1: false})}
+                >
+                    <PopupHeader
+                        left="取消"
+                        right="确认"
+                        leftOnClick={(event)=>this.setState({bottom_show1: false})}
+                        rightOnClick={(event) => { this.verifyPassword1(this); }}
+                    />
+                    <Form>
+                        <FormCell>
+                            <CellBody>
+                                <span className="tips_stype">{"确定要复制他人授权给您的产品？复制后您可以对新产品进行修改，并且不会影响其他人对原产品的使用，但是您不能再使用原产品。"}</span>
+                                <br/>
+                                <br/>
                                 <Input type="password" defaultValue={this.state.passwordForm.password}  placeholder="请输入密码" onBlur={this.handlerChangePassword.bind(this,"password")}/>
                             </CellBody>
                         </FormCell>
