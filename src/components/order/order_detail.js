@@ -24,7 +24,8 @@ import {
     PreviewItem,
     ActionSheet,
     Picker,
-
+    Panel,
+    Radio,
 } from 'react-weui';
 import 'weui';
 import 'react-weui/build/packages/react-weui.css';
@@ -152,19 +153,17 @@ export default class OrderDetail extends React.Component {
                 orderIdList:[props.match.params.orderId],
             },
             bottom_show1:false,
-            logistics_coms:[
-                {
-                    items:[
-
-                    ]
-                }
-            ],
-            logistics_show:false,
-            expressForm:{
-                inCommonUse:'1',
-            },
             singleExpressForm:{
                 expressId:'',
+                pageSize:9,
+                pageNum:1
+            },
+            bottom_show2:false,
+            logisticsList:[],
+            logisticsQueryForm:{
+                queryParams:'',
+                pageSize:9,
+                pageNum:1
             },
         }
     }
@@ -264,18 +263,23 @@ export default class OrderDetail extends React.Component {
 
         var logistics = sessionStorage.getItem("leaforbook-logistics-1");
         if(logistics!=null&&logistics!=undefined) {
-            this.state.logistics_coms[0].items = JSON.parse(logistics);
+            this.state.logisticsList = JSON.parse(logistics);
             this.setState({
-                logistics_coms: this.state.logistics_coms,
+                logisticsList: this.state.logisticsList,
             })
         } else {
             var url = '/common/express/get';
 
-            Post(url,this.state.expressForm).then(res => {
+            this.state.logisticsQueryForm.pageNum = 1;
+            this.setState({
+                logisticsQueryForm:this.state.logisticsQueryForm,
+            })
+
+            Post(url,this.state.logisticsQueryForm).then(res => {
                 sessionStorage.setItem("leaforbook-logistics-1",JSON.stringify(res.data))
-                this.state.logistics_coms[0].items = res.data;
+                this.state.logisticsList = res.data;
                 this.setState({
-                    logistics_coms: this.state.logistics_coms,
+                    logisticsList: this.state.logisticsList,
                 })
             }).catch(err => {
 
@@ -361,6 +365,35 @@ export default class OrderDetail extends React.Component {
 
         }).catch(err => {
 
+        })
+    }
+
+    searchLogistics = (queryParams,event) =>  {
+
+        this.state.logisticsQueryForm[queryParams] = event;
+        this.state.logisticsQueryForm.pageNum = 1;
+        this.setState({
+            logisticsQueryForm:this.state.logisticsQueryForm,
+        })
+
+        Post('/common/express/get',this.state.logisticsQueryForm).then(res => {
+
+            this.state.logisticsList = res.data;
+
+            this.setState({
+                logisticsList:this.state.logisticsList,
+            });
+
+        }).catch(err => {
+
+        })
+    }
+
+    selectLogistics = (i,event) => {
+        this.state.logisticsForm.name = this.state.logisticsList[i].name;
+        this.state.logisticsForm.type = this.state.logisticsList[i].expressId;
+        this.setState({
+            logisticsForm:this.state.logisticsForm,
         })
     }
 
@@ -513,10 +546,7 @@ export default class OrderDetail extends React.Component {
                             <CellBody>
                                 <Input type="text"
                                        value={this.state.logisticsForm.name}
-                                       onClick={ e=> {
-                                           //e.preventDefault();
-                                           this.setState({logistics_show: true})
-                                       }}
+                                       onClick={(event)=>this.setState({bottom_show2: true})}
                                        placeholder="请选择物流公司"
                                        readOnly={true}
                                 />
@@ -525,27 +555,54 @@ export default class OrderDetail extends React.Component {
                             </CellBody>
                         </FormCell>
                     </Form>
-                    <div className="fill_space"></div>
 
-                    <Picker
-                        onChange={selected=>{
-                            let value = ''
-                            let type = ''
-                            selected.forEach( (s,i)=> {
-                                value = this.state.logistics_coms[i]['items'][s].label;
-                                type = this.state.logistics_coms[i]['items'][s].expressId;
-                            })
-                            this.state.logisticsForm.name = value;
-                            this.state.logisticsForm.type = type;
-                            this.setState({
-                                logisticsForm:this.state.logisticsForm,
-                                logistics_show: false
-                            })
-                        }}
-                        groups={this.state.logistics_coms}
-                        show={this.state.logistics_show}
-                        onCancel={e=>this.setState({logistics_show: false})}
+                    <div className="fill_space"></div>
+                </Popup>
+
+                <Popup
+                    show={this.state.bottom_show2}
+                    onRequestClose={(event)=>this.setState({bottom_show2: false})}
+                >
+                    <PopupHeader
+                        left=""
+                        right="确认"
+                        leftOnClick={(event)=>this.setState({bottom_show2: false})}
+                        rightOnClick={(event) => this.setState({bottom_show2: false})}
                     />
+
+                    <Page className="ptr" title="" subTitle="">
+
+                        <SearchBar
+                            onChange={this.searchLogistics.bind(this,"queryParams")}
+                            defaultValue={this.state.logisticsQueryForm.queryParams}
+                            placeholder="搜索快递公司"
+                            lang={{
+                                cancel: '取消'
+                            }}
+                        />
+                        <CellsTitle>快递公司列表</CellsTitle>
+                        <Cells>
+                            <Panel  >
+                                <Form radio>
+                                    {this.state.logisticsList.map((logistics,i) => {
+                                        return (
+                                            <FormCell radio>
+                                                <CellBody>{logistics.name}</CellBody>
+                                                <CellFooter>
+                                                    <Radio name={"radio"} value={logistics.cn} onClick={event => {this.selectLogistics(i)}}/>
+                                                </CellFooter>
+                                            </FormCell>
+                                        )
+
+                                    })}
+                                </Form>
+                            </Panel>
+
+                        </Cells>
+
+                    </Page>
+
+                    <div className="fill_space"></div>
                 </Popup>
 
 
