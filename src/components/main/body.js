@@ -23,6 +23,10 @@ import OrderEditor from "../order/order_edit";
 import OrderDetail from "../order/order_detail";
 import OrderList from "../order";
 import TutorialList from "../tutorial";
+import TutorialVideo from "../tutorial/video";
+import TutorialProduct from "../tutorial/product";
+import TutorialOrder from "../tutorial/order";
+import TutorialDeliver from "../tutorial/deliver";
 
 
 export default class Body extends React.Component {
@@ -58,6 +62,10 @@ export default class Body extends React.Component {
                     <AuthorizedRoute path='/order/detail/:orderId' component={OrderDetail}/>
                     <AuthorizedRoute path='/order/list' component={OrderList}/>
                     <AuthorizedRoute path='/tutorial/list' component={TutorialList}/>
+                    <AuthorizedRoute path='/tutorial/video' component={TutorialVideo}/>
+                    <AuthorizedRoute path='/tutorial/product' component={TutorialProduct}/>
+                    <AuthorizedRoute path='/tutorial/order' component={TutorialOrder}/>
+                    <AuthorizedRoute path='/tutorial/deliver' component={TutorialDeliver}/>
 
                 </Switch>
             </main>
